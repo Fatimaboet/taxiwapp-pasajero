@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-toolbar class="blue" text-center>
+    <ion-title>
+      Viaje finalizado
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row text-center>
+      <h3>Haz finalizado el viaje en curso</h3>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-8>
+        <span>Tarifa base</span>
+      </ion-col>
+      <ion-col col-4 text-right>
+        <span>$12.00</span>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-8>
+        <span>Tiempo</span>
+      </ion-col>
+      <ion-col col-4 text-right>
+        <span>$15.00</span>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-8>
+        <span>Distancia</span>
+      </ion-col>
+      <ion-col col-4 text-right>
+        <span>$40.00</span>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-8>
+        <span>Propina</span>
+      </ion-col>
+      <ion-col col-4 text-right>
+        <span>{{ propine  | currency:'USD':true}}</span>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col col-4>
+        <ion-toggle></ion-toggle>
+      </ion-col>
+      <ion-col col-8>
+        <span>Ocupar mis 12 pesos del monedero</span>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+
+</ion-content>
+
+<ion-footer no-padding>
+  <ion-row>
+    <ion-col col-6>
+      <h4>EFECTIVO</h4>
+    </ion-col>
+    <ion-col col-6 text-right>
+      <h4>$45.70</h4>
+    </ion-col>
+  </ion-row>
+  <button ion-button full (click)="dismiss()">{{ 'pay' | translate}}</button>
+</ion-footer>

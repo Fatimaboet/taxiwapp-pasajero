@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-navbar>
+    <ion-grid class="header">
+      <ion-row>
+        <ion-col col-8>
+          <ion-input id="places" type="text" name="search" #places></ion-input>
+        </ion-col>
+        <ion-col col-4>
+          <button ion-button clear (click)="close()">{{'cancel' | translate}}</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+    <ion-list-header color="light">
+      {{'favorites' | translate}}
+    </ion-list-header>
+    <div text-center *ngIf="!locations">
+      <ion-spinner></ion-spinner>
+    </div>
+    <button ion-item *ngFor="let item of locations" (click)="selectLocation(item)">
+      <ion-icon name="home" item-start></ion-icon>
+      <h2>
+        {{ item.Descripcion }}
+      </h2>
+      <p>{{ item.Direccion }}</p>
+    </button>
+  </ion-list>
+  <div class="bottom-btn">
+    <button ion-button full (click)="send()">{{ 'ok' | translate }}</button>
+  </div>
+</ion-content>

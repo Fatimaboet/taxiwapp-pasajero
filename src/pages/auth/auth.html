@@ -1,0 +1,50 @@
+<!--
+  Generated template for the AuthPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content>
+	<div class="content">
+		<div class="logo">
+			<img src="../../assets/imgs/logo1.png">
+		</div>
+		<div class="content-login">
+			<ion-row class="login-buttons">
+        <ion-col col-12 col-sm-6 offset-sm-3 col-lg-4 offset-lg-4>
+          <ion-row justify-content-around>
+
+            <ion-col col-12 style="padding-bottom: 25px">
+              <button color="primary" ion-button full (click)="login()">
+                  <h6 ion-text>{{'login' | translate}}</h6>
+              </button>
+            </ion-col>
+
+            <ion-col col-12 style="padding-bottom: 25px">
+              <button color="white" ion-button full (click)="register()">
+                  <h6 color="primary" ion-text>{{'register' | translate}}</h6>
+              </button>
+            </ion-col>
+<!-- 
+            <ion-col col-12>
+              <button color="fb-color" ion-button full (click)="loginFacebook()">
+                  <ion-icon name="logo-facebook"></ion-icon>
+                  <h6 ion-text>{{'loginWith' | translate}} Facebook</h6>
+              </button>
+            </ion-col>
+
+            <ion-col col-12>
+              <button color="gg-color" ion-button full (click)="loginGoogle()">
+                <ion-icon name="logo-google"></ion-icon>
+                <h6 ion-text>{{'loginWith' | translate}} Google</h6>
+              </button>
+            </ion-col> -->
+
+          </ion-row>
+        </ion-col>
+      </ion-row>
+
+		</div>
+	</div>
+
+</ion-content>

@@ -1,0 +1,5 @@
+<div class="resize-img" *ngIf="editImagen">
+  <input #imageInput type="file" (change)="fileChanged($event)" class="input-file" />
+  <div class="imagen" [ngClass]="{'circle': form==='circle'}" (click)="addImagen()" [style.backgroundImage]="'url(' + (imagen || '../../assets/imgs/back-perfil.png') + ')'"></div>
+  <button type="button" ion-button full [disabled]="disabled" (click)="changeEmit()">{{ 'ok' | translate }}</button>
+</div>

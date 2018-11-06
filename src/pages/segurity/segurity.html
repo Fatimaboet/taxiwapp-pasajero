@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-row>
+    <ion-col col-12 padding>
+      <h2>Configuración de seguridad</h2>
+    </ion-col>
+  </ion-row>
+</ion-header>
+<form [formGroup]="form" (ngSubmit)="setSegurity()">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-12 text-center padding-top>
+          <h5>seguridad</h5>
+          <img src="../../assets/imgs/image34.png" width="60">
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-12>
+          <ion-item>
+            <ion-label>{{ 'sharedContacts' | translate }}</ion-label>
+            <ion-toggle formControlName="compartirMiViaje"></ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ 'contactSOS' | translate }}</ion-label>
+            <ion-toggle formControlName="avisarSiSOS"></ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ 'seguritySOS' | translate }}</ion-label>
+            <ion-toggle checked="true"></ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ 'requestPin' | translate }}</ion-label>
+            <ion-toggle formControlName="solicitarmePin"></ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-label>{{ 'pinIncorrent' | translate }}</ion-label>
+            <ion-toggle formControlName="enviarSMSpinINcorrecto"></ion-toggle>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  <ion-footer no-padding>
+    <ion-fab right bottom>
+      <button type="submit" ion-fab mini color="secondary"><ion-icon name="checkmark"></ion-icon></button>
+    </ion-fab>
+    <ion-fab left bottom>
+      <button type="button" color="danger" ion-fab mini (click)="dismiss()">
+        <ion-icon name="close" ></ion-icon>
+      </button>
+    </ion-fab>
+  </ion-footer>
+</form>

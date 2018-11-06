@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar class="blue" text-center>
+    <ion-title>
+      {{ 'paymentMethod' | translate }}
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <ion-icon name="md-close" color="white"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<div class="checkout">
+  <div center style="padding: 100px 0;">
+    <img src="../../assets/imgs/image10.png" style="width:60px">
+  </div>
+  <ion-grid *ngIf="paymentMethod">
+    <ion-row *ngFor="let method of paymentMethod" (click)="selectMethod(method)">
+      <ion-col col-3 class="icon-pay">
+        <img *ngIf="method.numero" src="../../assets/imgs/image30.png" style="width:20px">
+        <img *ngIf="!method.numero" src="../../assets/imgs/image46.png" style="width:20px">
+      </ion-col>
+      <ion-col col-6>
+        <h4 *ngIf="method.numero">{{ method.numero }}</h4>
+        <h4 *ngIf="!method.numero">Efectivo</h4>
+      </ion-col>
+      <ion-col col-3>
+        <button type="button" (click)="deletePaymentMethod(method)" ion-fab mini color="danger"><ion-icon name="trash"></ion-icon></button>
+      </ion-col>
+    </ion-row>
+    <ion-row (click)="addMethod()">
+      <ion-col col-3 class="icon-pay">
+        <ion-icon name="add-circle" color="primary"></ion-icon>
+      </ion-col>
+      <ion-col col-6>
+        <h4>{{ 'add' | translate }}</h4>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-fab center bottom>
+    <button type="button" (click)="dismiss()" ion-fab mini color="danger"><ion-icon name="close"></ion-icon></button>
+  </ion-fab>
+</div>

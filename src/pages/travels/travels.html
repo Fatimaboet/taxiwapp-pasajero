@@ -1,0 +1,67 @@
+<!--
+  Generated template for the TravelsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content>
+  <h3>{{ 'travels' | translate }}</h3>
+  <ion-segment [(ngModel)]="steps">
+      <ion-segment-button value="concluded">
+        {{ 'concluded' | translate }}
+      </ion-segment-button>
+      <ion-segment-button value="program">
+        {{ 'program' | translate }}
+      </ion-segment-button>
+      <ion-segment-button value="bills">
+        {{ 'bills' | translate }}
+      </ion-segment-button>
+  </ion-segment>
+  <div *ngIf="steps == 'bills'" class="bills" style="">
+    <ion-row>
+        <ion-col col-12 col-sm-8 offset-sm-2 col-lg-4 offset-lg-4>
+          <ion-list>
+            <p class="text-bill">Cantidad Facturable del mes actual</p>
+            <br>
+            <div class="content-bill">
+              <p class="cant-bill" item-start>{{ 94.4 | currency:'USD':true }}</p>
+              <button item-end ion-button class="text-verify" color="secondary">Facturar</button>
+            </div>
+          </ion-list>
+        </ion-col>
+    </ion-row>
+  </div>
+  <map [origin]="travel?.puntoOrigen" [destiny]="travel?.puntoDestino"></map>
+  <div class="content-step">
+    <div *ngIf="steps == 'concluded'">
+      <ion-row>
+          <ion-col col-12 col-sm-8 offset-sm-2 col-lg-4 offset-lg-4>
+            <ion-list >
+              <ion-item *ngFor="let t of travels" (click)="setTravel(t)">
+                <span item-start> {{t.fechaHoraSolicitud}} </span>
+                  
+                <span item-end> {{ t.costo | currency:'USD':true }}</span>
+              </ion-item> 
+
+
+            </ion-list>
+          </ion-col>
+      </ion-row>
+    </div>
+    <div *ngIf="steps == 'program'">
+      <ion-row>
+          <ion-col col-12 col-sm-8 offset-sm-2 col-lg-4 offset-lg-4>
+            <ion-list >
+              <ion-item *ngFor="let t of programs" (click)="setTravel(t)">
+                <span item-start> {{t.fechaHoraSolicitud}} </span>
+              </ion-item> 
+            </ion-list>
+          </ion-col>
+      </ion-row>
+    </div>
+
+  </div>
+    <ion-fab center bottom>
+      <button ion-fab mini color="danger" (click)="goBack()"><ion-icon ios="md-close" md="md-close"></ion-icon></button>
+  </ion-fab>
+</ion-content>

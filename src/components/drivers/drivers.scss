@@ -1,0 +1,35 @@
+drivers {
+  position: fixed;
+  background: rgba(77, 127, 150, 0.75);
+  bottom: 45px;
+  left: 0;
+  width: 100%;
+  min-height: 30vh;
+  max-height: 60vh;
+  z-index: 99999;
+  overflow-y: auto;
+
+  table{
+    width: 100%;
+    border-top: 2px solid #fff;
+  }
+  tr{
+    text-align: center;
+  }
+  tbody tr:hover{
+    background: rgba(255, 255, 255, 0.6);
+  }
+  th, td{
+    color: #fff;
+    padding:10px 0;
+    > ion-icon{
+      color: #ffc107;
+    }
+  }
+  img {
+    width: 40px;
+  }
+  h5,h6{
+    color: #fff;
+  }
+}

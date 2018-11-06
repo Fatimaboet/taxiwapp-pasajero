@@ -1,0 +1,18 @@
+favorite-location {
+	.bottom-btn{
+		position: fixed;
+		z-index: 999;
+		bottom: 0;
+		left:0;
+		width: 100%;
+		background-color: #fff !important;
+	}
+	.pac-container{
+		width: 80% !important;
+	}
+	.pac-item{
+		text-overflow: initial;
+		overflow: initial;
+		white-space: initial;
+	}
+}

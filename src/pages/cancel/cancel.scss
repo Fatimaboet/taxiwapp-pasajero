@@ -1,0 +1,25 @@
+page-cancel {
+  .header{
+    background: #d96c74;
+    color: #fff;
+    p{
+      font-size: 12px;
+    }
+    .profile-imagen{
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: #fff;
+      background-position: center;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+    }
+  }
+  h2{
+    width: 100%;
+  }
+  .select{
+    padding: 25px;
+    text-align: center;
+  }
+}

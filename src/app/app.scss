@@ -1,0 +1,159 @@
+// http://ionicframework.com/docs/theming/
+
+
+// App Global Sass
+// --------------------------------------------------
+// Put style rules here that you want to apply globally. These
+// styles are for the entire app and not just one component.
+// Additionally, this file can be also used as an entry point
+// to import other Sass files to be included in the output CSS.
+//
+// Shared Sass variables, which can be used to adjust Ionic's
+// default Sass variables, belong in "theme/variables.scss".
+//
+// To declare rules for a specific mode, create a child rule
+// for the .md, .ios, or .wp mode classes. The mode class is
+// automatically applied to the <body> element in the app.
+.ion-page {
+    background-color: #fff;
+}
+.item-label-stacked .text-input-md, .item-label-floating .text-input-md{
+    background: #fff;
+    padding: 5px;
+    border-radius: 10px;
+}
+.list-md .item-block .item-inner, .list-md .item-input:last-child{
+    border: none !important;
+}
+.msg-error-input {
+    color: red;
+    margin-left: 15px;
+}
+.button-full-md{
+    border-radius: 10px;
+    height: 4rem;
+    h6{
+    	margin: 0;
+    }
+    ion-icon.icon.icon-md {
+	    position: absolute;
+	    left: 15px;
+	    font-size: 1.6em;
+	    padding-right: 10px;
+	    border-right: 1px solid #ddd;
+	}
+}
+
+a.link{
+    color: #fcc438;
+    text-decoration: underline;
+}
+.list-md a.link{
+	padding-left: 16px;
+}
+ion-input, ion-textarea, .select-md, .datetime-md {
+    border: 1px solid #034d71;
+    border-radius: 5px;
+    margin: 10px 0;
+    .text-input-md{
+    	margin: 8px 8px;
+    }
+}
+.select-md, .datetime-md{
+	width: 100%;
+    max-width: 100%;
+    padding: 8px 8px 8px 16px;
+}
+
+.alert {
+  > div{
+       background: rgba(255, 0, 0, 0.8) !important;
+   }
+}
+
+.warning {
+  > div{
+     background: rgba(255, 163, 13, 0.8) !important;
+   }
+}
+.button-full-md{
+  border-radius: 0;
+}
+
+#contentList{
+  background-color: rgba(59, 115, 140, 0.85) !important;
+  .item-md{
+    background-color: transparent;
+  }
+}
+.icon-menus{
+  height: 35px;
+}
+.img-menu{
+  text-align: center;
+  img{
+    height: 80px !important;
+    width: 80px !important;
+    object-fit: cover;
+  }
+  h5{
+    color: #ffffff;
+    margin-top: 10px;
+  }
+}
+.name-menu{
+  margin-left: 15px !important;
+  color: #fff;
+  font-weight: bold !important;
+  font-size: 18px !important;
+}
+ion-list#menulist .item .item-inner .label {
+  margin: 5px 3px 5px 0px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+}
+#menuProfile .label{
+  align-items: normal !important;
+}
+#menulist.list .item .item-inner,
+#menutoolbar.toolbar .item .item-inner {
+  border-bottom: 0px;
+}
+#menuProfile{
+  height: 145px;
+  align-items: normal !important;
+  padding-top: 10px;
+}
+.button-menus{
+  img{
+    height: 30px;
+    width: 30px;
+    margin-right: 20px;
+    object-fit: contain;
+  }
+}
+.logout-menus .label{
+  justify-content: center;
+  color: #F44336 !important;
+  text-decoration: underline;
+}
+.menu-list{
+  padding-top: 10px;
+}
+ion-menu{
+  bottom: 105px;
+}
+ion-menu.show-menu{
+  height: 100vh;
+}
+.pac-container{
+  width: 80% !important;
+}
+.pac-item{
+  text-overflow: initial;
+  overflow: initial;
+  white-space: initial;
+}

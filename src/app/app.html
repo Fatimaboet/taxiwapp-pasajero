@@ -1,0 +1,27 @@
+<ion-menu [content]="content" [swipeEnabled]="false">
+  <ion-content id="contentList">
+    <ion-list id="menulist">
+      <ion-item-group>
+        <ion-item id="menuProfile" menuClose [ngStyle]="{'background': 'linear-gradient(0deg, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(' + image + ') center center / cover no-repeat'}" (click)="userProfileClick()">
+            <ion-avatar item-start class="img-menu">
+              <img alt="" [src]="image">
+              <h5>{{user?.telefono}}</h5>
+            </ion-avatar>
+            <h2 class="name-menu">{{user?.Nombre}}</h2>
+          </ion-item>
+      </ion-item-group>
+      <ion-item-group *ngIf="pages.length > 0" class="menu-list">
+        <div *ngFor="let p of pages">
+          <button menuClose ion-item class="button-menus" (click)="openPage(p)"><img src="{{p.icon}}"> {{p.title}}
+          </button>
+        </div>
+      </ion-item-group>
+      <ion-item-group>
+      <button menuClose ion-item class="logout-menus" (click)="logout()">{{ 'logout' | translate }}</button>
+      </ion-item-group>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

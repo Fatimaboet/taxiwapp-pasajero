@@ -1,0 +1,12 @@
+@import '../auth-base/auth-base.scss';
+
+page-auth {
+	background-color: #034d71 !important;
+	.content-login{
+		margin: 10px 30px;
+		.item-md{
+			background-color: transparent;
+		}
+	}
+
+}

@@ -1,0 +1,24 @@
+payment-method {
+  .toolbar-background{
+    background: #034d71;
+  }
+  .toolbar-title{
+     color: #fff; 
+  }
+  .checkout{
+    div{
+        text-align: center;
+    }
+    .icon-pay>*{
+        margin: 0 auto;
+        margin-top: 15px;
+    }
+    h4{
+      text-align: center;
+          font-size: 1.5rem;
+    }
+    ion-row{
+      background: #c8d5dc;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+page-sos {
+  background-color: #696969 !important;
+  h2{
+    color: #fff;
+    text-align: center;
+    margin-top: 10vh !important;
+  }
+  .sos{
+    background: #f53f3d;
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    color: #fff;
+    font-size: 40pt;
+    position: fixed;
+    top: calc(50% - 100px);
+    left: calc(50% - 75px);
+    text-align: center;
+    padding: calc(75px - 20pt);
+  }
+}

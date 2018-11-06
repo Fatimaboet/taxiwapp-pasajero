@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      {{'updateCards' | translate}}
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">
+        <span ion-text color="primary" showWhen="ios">{{'cancel' | translate}}</span>
+        <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formGroup]="form" (ngSubmit)="add()">
+    <ion-list>
+      <ion-item>
+        <ion-label>{{ 'default' | translate }}</ion-label>
+        <ion-toggle formControlName="default"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{ 'method' | translate }}</ion-label>
+        <ion-select formControlName="method">
+          <ion-option *ngFor="let met of methods" [value]="met">
+            {{ met.metodo }}
+          </ion-option>
+        </ion-select>
+      </ion-item>
+      <div *ngIf="form.value.method.esEfectivo == false">
+        <ion-item>
+          <ion-label stacked>{{ 'owner' | translate }}</ion-label>
+          <ion-input type="text" formControlName="owner"></ion-input>
+        </ion-item>
+        <small class="msg-error-input" *ngIf="validate('owner')">{{ 'ownerValid' | translate }}</small>
+        <ion-item>
+          <ion-label stacked>{{ 'num-card' | translate }}</ion-label>
+          <ion-input type="text" formControlName="numberCard" placeholder="1234123412341234"></ion-input>
+        </ion-item>
+        <small class="msg-error-input" *ngIf="validate('numberCard')">{{ 'numbercardValid' | translate }}</small>
+        <ion-grid>
+          <ion-row>
+            <ion-col col-5>
+              <ion-datetime displayFormat="MM/YYYY" pickerFormat="MM-YY" formControlName="date" min="2018" max="2030"  placeholder="Exp MM/YY" doneText="{{ 'ok' | translate }}" cancelText="{{ 'cancel' | translate }}"></ion-datetime>
+            </ion-col>
+            <ion-col col-7>
+              <ion-input type="text" formControlName="cvv" placeholder="CVV"></ion-input>
+              <small class="msg-error-input" *ngIf="validate('cvv')">{{ 'cvvValid' | translate }}</small>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
+
+      <ion-fab left bottom>
+        <button type="button" (click)="dismiss()" ion-fab color="danger"><ion-icon name="close"></ion-icon></button>
+      </ion-fab>
+
+      <ion-fab right bottom>
+        <button type="submit" ion-fab color="secondary"><ion-icon name="add"></ion-icon></button>
+      </ion-fab>
+    </ion-list>
+  </form>
+</ion-content>

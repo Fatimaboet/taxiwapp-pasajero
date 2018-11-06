@@ -1,0 +1,40 @@
+<!--
+  Generated template for the HelpPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ 'help' | translate }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+	<div class="content-step">
+		<ion-list>
+		  <ion-item *ngFor="let item of listConversation" class="content-msg">
+		  	<div *ngIf="item.Mensaje != ' '" [ngClass]="{'content-left': item.MensajeRespuesta != ' '}">
+		  		<p  class="item-left">
+		  		{{ item.fechaHoraMensaje | date:'dd-MMM-yyyy hh:mm' }} {{ item.Mensaje }}
+		  		</p>
+		  	</div>
+		  	<div *ngIf="item.MensajeRespuesta != ' '">
+		  		<p *ngIf="!item.estatusCerrado" class="item-right">*** Ticket {{ item.idBandeja }} Ha sido abierto ***</p>
+			    <p class="item-right">
+			  		{{ item.fechaHoraRespuesta | date:'dd-MMM-yyyy hh:mm' }} {{ item.NombreMesaAyuda }}: {{ item.MensajeRespuesta }}
+			  	</p>
+			  	<p *ngIf="item.estatusCerrado" class="item-right">--Ticket {{ item.idBandeja }} Ha sido cerrado---</p>
+		  	</div>
+		  </ion-item>
+		</ion-list>
+	</div>
+	<div class="content-area">
+		<ion-textarea rows="3" maxLength="500" [(ngModel)]="message" (keyup.enter)="sendConversations()"></ion-textarea>
+	</div>
+	<ion-fab center bottom>
+	    <button ion-fab mini color="danger" (click)="goBack()"><ion-icon ios="md-close" md="md-close"></ion-icon></button>
+	</ion-fab>
+	<img src="../../assets/imgs/archivo.png" class="img-left" [hidden]="true" width="40">
+	<img src="../../assets/imgs/send.png" class="img-right" (click)="sendConversations()" width="40">
+</ion-content>

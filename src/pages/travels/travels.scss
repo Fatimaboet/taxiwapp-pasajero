@@ -1,0 +1,108 @@
+page-travels {
+	h3{
+		padding: 2rem 1rem 1.6rem 1.6rem;
+    	color: #ffffff;
+    	margin: 0px;
+    	text-align: left;
+    	background-color: #034d71 !important;
+	}
+	ion-segment{
+		background-color: #034d71 !important;
+	}
+	.content-step{
+		/*height: calc(100% - 160px) !important;*/
+	    overflow-y: scroll;
+	    position: fixed;
+	    bottom: 0;
+	    z-index: 99999;
+	    width: 100%;
+	    max-height: 50%;
+	}
+	ion-fab[bottom] {
+	    bottom: 0px;
+	}
+	.segment-ios .segment-button.segment-activated, .segment-md .segment-button.segment-activated {
+	    color: #03A9F4;
+	    background-color: #ffffff;
+	    margin: 0px 10px;
+	    border-top-left-radius: 10px;
+	    border-bottom-left-radius: 0px;
+	    border-top-right-radius: 10px;
+	    border: none;
+	    text-transform: unset;
+    	font-size: 1.3rem;
+    	font-weight: normal;
+	}
+	.segment-ios .segment-button, .segment-md .segment-button{
+		color: #ffffff;
+		border: none;
+		text-transform: unset;
+    	font-size: 1.3rem;
+	}
+	.color-gray{
+		color: #bdbdbd;
+	}
+	.color-black{
+		color: #000000;
+	}
+	.item-subhead{
+		p{
+			margin-bottom: 0px;
+		}
+	}
+	.content-info{
+		position: absolute;
+		bottom: 50px;
+		width: 85%;
+		.list-md, .list-ios{
+			background-color: #ffffff;
+			.label-md{
+				margin: 5px 8px 5px 0px;
+			}
+		}
+	}
+	.list-md .item-block .item-inner{
+		border-bottom: 1px solid #dedede !important;
+	}
+	.title-earnings{
+		text-align: center;
+		h2{
+			margin-top: 30px;
+		    background-color: #c1e3f7;
+		    padding: 8px 0px;
+		    font-weight: normal;
+		}
+		p{
+			font-size: 18px;
+    		margin-top: 0px;
+		}
+	}
+	.text-bill{
+		margin: 30px 0px;
+    	font-size: 16px;
+	}
+	.cant-bill{
+		color: #FFC107;
+	    font-size: 24px;
+	    font-weight: bold;
+	    flex: 1;
+	}
+	.content-bill{
+		display: flex;
+    	align-items: center;
+	}
+	.list-md, .list-ios{
+    	padding: 0px 16px;
+	}
+	.item-type{
+		font-size: 11px;
+    	margin-left: 10px !important;
+	}
+	.bills{
+		height: 100%;
+	    position: absolute;
+	    z-index: 9999999999;
+	    background: #ffff;
+	    width: 100%;
+	}
+}

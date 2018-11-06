@@ -1,0 +1,20 @@
+@import '../auth-base/auth-base.scss';
+
+page-language-select {
+	background-color: #034d71 !important;
+	.content{
+	    background: url(../assets/imgs/angel.png);
+	    background-size: contain;
+	    background-repeat: no-repeat;
+	    background-position: bottom;
+	    max-width: 500px;
+	    margin: 0 auto;
+	    height: 100%;
+	    position: relative;
+    }
+    .submit{
+		position: fixed;
+		bottom: 10%;
+		left: calc( 50% - 60px );
+	}
+}

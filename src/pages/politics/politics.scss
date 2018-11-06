@@ -1,0 +1,17 @@
+page-politics {
+	.toolbar-background-md, .toolbar-background-ios{
+		background-color: #194d71;
+		border-color: transparent;
+	}
+	.toolbar-title-md, .toolbar-title-ios{
+		color: #ffffff;
+	}
+	.color-gray{
+		color: #bdbdbd;
+		display: flex;
+	    align-items: center;
+	}
+	.item-md, .item-ios{
+		border-bottom: 1px solid #bdbdbd !important;
+	}
+}

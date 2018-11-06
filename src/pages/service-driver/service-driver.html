@@ -1,0 +1,87 @@
+<!--
+  Generated template for the ServiceDriverPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-row>
+    <ion-col col-3>
+      <div class="profile-imagen" [style.backgroundImage]="'url(' + route + driver?.foto + ')'"></div>
+    </ion-col>
+    <ion-col col-5 no-padding>
+     <h4>{{driver?.nombre}}</h4>
+     <p>{{driver?.Modelo}}<br>{{driver?.linea}}</p>
+    </ion-col>
+    <ion-col col-2 text-center>
+        <button no-margin mini ion-fab color="primary"  *ngIf="!init"><ion-icon name="chatboxes"></ion-icon></button>
+    </ion-col>
+    <ion-col col-2 text-center>
+        <button no-margin mini ion-fab color="secondary"  *ngIf="!init"><ion-icon name="call"></ion-icon></button>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-8 text-center no-padding>
+      <p *ngIf="!init">{{ 'waitPoint' | translate }}</p>
+      <p *ngIf="init">{{ 'tripProgress' | translate }}</p>
+    </ion-col>
+    <ion-col col-2 no-padding>
+      <button ion-button mini color="primary" (click)="edit()" *ngIf="!init">{{ 'edit' | translate }}</button>
+    </ion-col>
+    <ion-col col-2 no-padding>
+      <button ion-button mini color="danger" (click)="cancelService()" *ngIf="!init">{{ 'cancel' | translate }}</button>
+    </ion-col>
+  </ion-row>
+
+</ion-header>
+
+<ion-content no-padding>
+  <div class="price">{{ costo | currency:'USD':true }}</div>
+  <map [drivers]="[driver]" (latLng)="setLatLng($event)"  [origin]="puntoOrigen" [destiny]="puntoDestino" [reload]="true"></map>
+  <ion-list class="accordion-list">
+    <ion-list-header no-padding text-center> 
+      <button ion-item detail-none (click)="toggleAccordion()" class="accordion-header" [class.active]="expanded">
+          <ion-icon item-left name="ios-arrow-forward"></ion-icon>
+      </button>
+      <section #accordionContent [class.active]="expanded" class="accordion-content">
+        <button ion-item (click)="goPayments()">
+          <ion-thumbnail item-start>
+            <img *ngIf="payment?.numero" src="../../assets/imgs/image30.png">
+            <img *ngIf="!payment?.numero" src="../../assets/imgs/image46.png">
+          </ion-thumbnail>
+          {{ payment?.numero || 'efectivo' }}
+          <ion-icon item-end name="ios-arrow-forward"></ion-icon>
+        </button> 
+        <button ion-item>
+          <ion-thumbnail item-start>
+            <img src="../../assets/imgs/image34.png">
+          </ion-thumbnail>
+          {{ 'addPassengers' | translate}} 
+          <ion-icon item-end name="ios-arrow-forward"></ion-icon>
+        </button>
+        <button ion-item>
+          <ion-thumbnail item-start>
+            <img src="../../assets/imgs/image34.png">
+          </ion-thumbnail>
+            {{ 'addStops' | translate}} 
+          <ion-icon item-end name="ios-arrow-forward"></ion-icon>
+        </button> 
+        <button ion-item (click)="segurity()">
+          <ion-thumbnail item-start>
+            <img src="../../assets/imgs/image34.png">
+          </ion-thumbnail>
+          {{ 'security' | translate}}
+          <ion-icon item-end name="ios-arrow-forward"></ion-icon>
+        </button> 
+      </section>
+    </ion-list-header>
+  </ion-list>
+</ion-content>
+
+<ion-footer no-padding>
+  <!-- <button ion-button full no-margin color="secondary">Gana dinero todos los días</button>
+  <p>Invita a tus contactos a utilizar TaxiWapp y gana 1% de cada viaje que realice.</p> -->
+  <button ion-button full *ngIf="!init" no-margin color="secondary" (click)="initService()">{{ 'startTrip' | translate}}</button>
+  <button ion-button full *ngIf="init" no-margin color="secondary" (click)="finish()">{{ 'endTrip' | translate}}>></button>
+  <button ion-button full *ngIf="init" no-margin color="danger" (click)="sos()"><< SOS</button>
+</ion-footer>

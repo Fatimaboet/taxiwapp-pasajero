@@ -1,0 +1,7 @@
+{
+  "name": "taxiWapp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}

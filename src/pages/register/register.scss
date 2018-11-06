@@ -1,0 +1,145 @@
+page-register.ion-page {
+	background-color: #fff !important;
+	.card-md{
+		margin: 0;
+    	width: 100%;
+    	-webkit-box-shadow: none;
+    	box-shadow: none;
+		.card-content-md {
+    		/* min-height: 90vh; */
+    	}
+	}
+	.card-title-md{
+	    font-size: 1.5rem;
+	    text-align: center;
+	}
+
+    ion-slides{
+        height: calc(100% - 50px);
+    }
+
+    .cancel{
+        position: fixed;
+        bottom: 10px;
+        z-index: 999;
+        left: calc(50% - 23px);
+        button{
+            width: 30px;
+            height: 30px;
+        }
+    }
+
+    .icon[item-end] {
+        margin-left: 0;
+        margin-top: 11px;
+        margin-bottom: 10px;
+        position: absolute;
+        top: 0;
+        right: 30px;
+    }
+	.radio-select{
+		position: absolute;
+    	top: calc(50% - 12.5px);
+	}
+	.button-small-md{
+	    max-width: 100%;
+    	font-size: 1rem;
+    	position: absolute;
+    	top: calc(50% - 15px);
+    	left: 0;
+	}
+	.center-vertically>*{
+		position: absolute;
+    	top: calc(50% - 10px);
+    	left: 0;
+	}
+	.item-input .label-md, .item-select .label-md, .item-datetime .label-md{
+		color: #3aa6de;
+	}
+
+	.input-file {
+        display: none
+    }
+
+    .profile-imagen{
+    	height: 20vh;
+	    background-size: contain;
+	    background-repeat: no-repeat;
+	    background-color: #034d71;
+	    background-position: center;
+    }
+
+    .msg-edit-imagen{
+    	z-index: 9999999;
+	    width: 100%;
+	    background: #034d71;
+	    position: fixed;
+	    top: 0;
+	    color: #fff;
+	    padding: 5px;
+    }
+    .danger{
+    	background: #c93439;
+    	position: relative;
+    }
+    .blue{
+        .toolbar-background{
+    	   background: #034d71;
+        }
+        .toolbar-title{
+           color: #fff; 
+        }
+    }
+
+    ion-label{
+    	white-space: unset;
+    }
+    .round{
+    	border-radius: 50%;
+		width: 40px;
+		height: 40px;
+		padding: 0;
+    }
+    table{
+    	width: 100%;
+    	th{
+    		background: #034d71;
+    		color: #fff;
+    		padding: 10px 0;
+    		border: 1px solid #fff;
+    	}
+    }
+    .content{
+    	max-height: 100vh;
+    	overflow: scroll;
+    }
+    .checkout{
+        div{
+            text-align: center;
+        }
+        .icon-pay>*{
+            margin: 0 auto;
+            margin-top: 15px;
+        }
+    	h4{
+    		text-align: center;
+            font-size: 1.5rem;
+    	}
+    	ion-row{
+    		background: #c8d5dc;
+    	}
+    }
+
+    .step-number{
+        text-align: center;
+        font-size: 15px;
+        color: #313131;
+        margin: 0px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        text-align: left;
+        bottom: 0;
+    }
+
+}

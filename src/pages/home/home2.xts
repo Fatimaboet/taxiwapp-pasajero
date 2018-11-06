@@ -1,0 +1,272 @@
+
+  
+
+  
+
+  
+
+  setPosition(control: string) {
+    let lat = this.lat;
+    let lng = this.lng;
+    let geocoder = new google.maps.Geocoder;
+    console.log({lat, lng, control});
+    geocoder.geocode({'location': {lat, lng}}, (results, status) => {
+      if (status === 'OK') {
+        console.log(results)
+        this.form.controls[control].setValue(results[0].formatted_address);
+        let coord = lng +' '+ lat;
+        if (control === "start") {
+          this.puntoOrigen = coord;
+        } else {
+          this.puntoDestino = coord;
+        }
+      } else {
+        // window.alert('Geocoder failed due to: ' + status);
+      }
+    });
+  }
+
+  
+
+  
+
+  selectDriver(driver){
+    console.log(driver);
+    this.driver = driver;
+  }
+
+  
+
+  submit() {
+    if (this.submited)
+      this.saveService();
+    else
+      this.addService();
+  }
+
+  async addService(){
+    if (this.form.invalid || this.idTipoServicio === null || !this.puntoOrigen || !this.puntoDestino) {
+      this.base.showToast('completeFields');
+    } else {
+      this.base.startLoading();
+      this.submited = true;
+      this.selectDriverNot();
+      await this.getDrivers();
+      await this.getMethod();
+      this.base.stopLoading();
+    }
+  }
+
+  async saveService(){
+    if (this.form.invalid || this.idTipoServicio===null || !this.puntoOrigen || !this.puntoDestino)
+      this.base.showToast('completeFields');
+   else if (!this.driver)
+      this.base.showToast('selecione un conductor');
+    else {
+      const data = {
+        idTipoServicio: this.idTipoServicio,
+        puntoOrigen: this.puntoOrigen,
+        puntoDestino: this.puntoDestino,
+        fechaHoraSolicitud:  moment(this.form.value.date).format("YYYY-MM-DD HH:mm:ss"),
+        idEstatusViaje: this.idEstatusViaje,
+      }
+      this.base.startLoading();
+      await this.services.addService(data).toPromise().then(
+        resp => {
+          console.log(resp)
+          this.idViajes = resp.recordset[0].idViajes;
+          this.saved = true;
+          this.awaitDriver();
+        },
+        error => {
+          console.log(error)
+          this.base.showToast('error', 'alert');
+        }
+      );
+
+      if (this.idViajes) {
+        await this.services.addDriverService({id: this.idViajes, idConductor: this.driver.idConductor, idVehiculo: this.driver.idVehiculo})
+          .toPromise().then(
+            resp => {
+              console.log()
+              this.base.showToast('El conductor ha sido invitado con exito');
+            },
+            error => {
+              console.log(error)
+              this.base.showToast('error', 'alert');
+            }
+        )
+      } else {
+        this.base.showToast('error','alert');
+      }
+      this.submited = false;
+      this.base.stopLoading();
+    }
+
+  }
+
+  cancel(toast?: boolean){
+    if(!toast) this.toast.dismiss();
+    this.drivers = null;
+    this.submited = false;
+    this.idViajes = null;
+  }
+
+  cancelDriver(toast?: boolean){
+    if(!toast) this.toast.dismiss();
+    this.driver = null;
+    this.selectDriverNot();
+  }
+
+  
+
+  selectDriverNot(){
+    this.translate.get("selectDriver").subscribe(
+      value => {
+        this.toast = this.toastCtrl.create({
+          message: value,
+          position: "top",
+          cssClass: "warning",
+          showCloseButton: true,
+          closeButtonText: "cancelar"
+        });
+        this.toast.present();
+        this.toast.onDidDismiss(()=>{
+          this.cancel(true);
+        })
+      }
+    );
+  }
+
+  awaitDriver(){
+    this.translate.get("awaitDriver").subscribe(
+      value => {
+        this.toast = this.toastCtrl.create({
+          message: value,
+          position: "top",
+          cssClass: "warning",
+          showCloseButton: true,
+          closeButtonText: "cancelar"
+        });
+        this.toast.present();
+        this.toast.onDidDismiss(()=>{
+          
+        })
+      }
+    );
+    this.awaitReplay();
+  }
+
+  awaitReplay(){
+    setTimeout(() => {
+      if (this.idViajes) {
+        this.services.getStatus(this.idViajes).toPromise().then(
+          resp => {
+            console.log(resp)
+            if (resp.recordset[0].idEstatusViaje == 2) {
+              this.toast.dismiss();
+              setTimeout(()=>this.goServiceDriver());
+            } else if(resp.recordset[0].idEstatusViaje == 7) {
+              this.toast.dismiss();
+              this.cancelDriver();
+            } else {
+              this.awaitReplay();
+            }
+          },
+          error => {
+            console.log(error)
+          }
+        )
+      
+      }
+    },30000)
+
+  }
+
+  goServiceDriver(){
+    let data = {
+      service: this.idViajes, 
+      driver: this.driver,
+      location: {puntoOrigen: this.puntoOrigen , puntoDestino: this.puntoDestino}
+    };
+    this.toast.dismiss();
+    this.navCtrl.setRoot( ServiceDriverPage, data );
+  }
+
+  
+
+  
+
+  isFavorite(control: string): boolean{
+    let favorite = (control=='start')?this.favoriteStart:this.favoriteFinish;
+    console.log(favorite.select)
+    return favorite.select;
+  }
+
+
+
+  // service 
+
+  toggleAccordion() {
+    this.expanded = !this.expanded;
+    const newHeight = this.expanded ? '100%' : '0px';
+    this.renderer.setElementStyle(this.elementView.nativeElement, 'height', newHeight);
+  }
+
+  get(id) {
+    this.services.get(id).toPromise().then(
+      data => {
+        console.log(data)
+      }
+    );
+  }
+
+  edit() {
+    const modal = this.modalCtrl.create(FavoriteLocationComponent);
+    modal.onDidDismiss(data => {
+      if (data) {
+        let coord = data.lng +' '+ data.lat;
+        this.newPoint = coord;
+        console.log(coord);
+      }
+    });
+    modal.present();
+  }
+
+  getMethod(){
+    this.paymentService.getPaymentMethod().toPromise().then(
+      resp => {
+        console.log(resp);
+        this.paymentMethods = resp.recordset;
+        this.payment = this.paymentMethods;
+      },
+      error => {
+        console.log(error)
+      }
+    )
+  }
+
+
+  
+
+  initService(){
+    this.base.startLoading();
+    this.services.initService({id: this.id, puntopartida: this.newPoint || this.puntoOrigen }).toPromise().then(
+      resp => {
+        console.log(resp)
+        this.base.stopLoading();
+        if (resp.recordset[0].idViajeIniciado){
+          this.base.showToast('Viaje iniciado');
+          this.init = true;
+        } else {
+          this.base.showToast('error','alert');
+        }
+      },
+      error => {
+        this.base.stopLoading();
+        this.base.showToast('error','alert');
+        console.log(error)
+
+      }
+    )
+  }

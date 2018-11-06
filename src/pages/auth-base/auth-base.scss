@@ -1,0 +1,57 @@
+.ion-page {
+  ion-content{
+    padding-bottom: 0;
+      background-color: transparent !important;
+      
+      .logo{
+        max-width: 265px;
+        margin: 0 auto;
+          padding: 35px;
+      }
+  }
+  .radio-select{
+    text-align: center;
+    label{
+      color: #fff;
+    }
+    ion-radio{
+      margin: 0 10px;
+    }
+    img{
+      width: 25px;
+    }
+  }
+  .label-md[stacked], .label-md[floating]{
+    color:#fff;
+    font-size: 1.4rem;
+  }
+
+  ion-input, ion-textarea, .select-md, .datetime-md{
+    margin: 5px 0;
+  }
+  .submit{
+    /* position: absolute;
+    bottom: 10%;
+    left: calc( 50% - 60px ); */
+    text-align: center;
+    button{
+      background: rgba(47, 133, 140, 0.85);
+      width: 120px;
+      padding: 20px 10px;
+      border-radius: 15px;
+    }
+    button:hover:not(.disable-hover) {
+        background-color: rgba(47, 133, 140, 1);
+    }
+  }
+  .cancel{
+    text-align: center;
+    button{
+      opacity: 0.8;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+    }
+  }
+
+}

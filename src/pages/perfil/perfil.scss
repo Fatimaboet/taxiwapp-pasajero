@@ -1,0 +1,126 @@
+page-perfil {
+	.toolbar-background-md, .toolbar-background-ios{
+		background-color: #194d71;
+		border-color: transparent;
+	}
+	.toolbar-title-md, .toolbar-title-ios{
+		color: #ffffff;
+	}
+	.header-profile{
+	    height: 195px;
+	    display: flex;
+	    align-items: center;
+	    justify-content: center;
+	    position: relative;
+	}
+	.img-profile{
+	    border-radius: 50em;
+	    width: 100px;
+		height: 100px;
+		object-fit: cover;
+	}
+	.icon-edit{
+	    position: absolute;
+	    margin-left: 60px;
+    	margin-top: -45px;
+	    width: auto;
+	    height: 20px;
+	    z-index: 9999;
+	}
+	.list-md, .list-ios{
+		margin-top: 30px;
+    	padding: 0px 16px;
+    	text-align: left;
+	}
+	.item-md{
+		padding-left: 0px !important;
+		margin-top: 16px;
+	}
+	.item-ios{
+		margin-top: 16px;
+		padding-left: 8px;
+	}
+	.list-md .item-block .item-inner, .select-md, .select-ios{
+		padding-left: 8px;
+	}
+	.text-input-ios{
+		background-color: transparent !important;
+		padding: 0px 5px;
+	}
+	.select-country{
+		width: 100% !important;
+    	border: none !important;
+	}
+	.item-country, .list-country{
+		margin-top: 0px !important;
+	}
+	.button-send{
+		width: 94%;
+	    white-space: normal;
+	    line-height: 1.6rem;
+	    text-transform: initial;
+	    padding-top: 1px;
+	    background-color: #03A9F4;
+	}
+	.text-code{
+		font-size: 1.4rem;
+    	text-align: center;
+    	color: #666;
+	}
+	.text-left{
+		text-align: left !important;
+		margin-left: 5px;
+	}
+	.text-verify{
+		text-transform: initial;
+	}
+	.button-ios{
+		margin: 0px;
+	}
+	.mt-10{
+		margin-top: 10px;
+		text-align: center;
+	}
+	.color-blue{
+		color: #03A9F4;
+	}
+	.label-md[stacked], .label-ios[stacked]{
+		color: #03A9F4;
+    	font-size: 16px;
+    	margin-bottom: 5px !important;
+	}
+	.color-gray{
+		color: #bdbdbd;
+		display: flex;
+	    align-items: center;
+	}
+	.list-items{
+		.item-md, .item-ios{
+			margin-top: 0px !important;
+			padding-bottom: 5px;
+    		border-bottom: 1px solid #bdbdbd !important;
+		}
+		.item-inner{
+			align-items: initial !important;
+		}
+	}
+	.item-disabled{
+		background-color: #c1e3f7;
+    	border-radius: 5px;
+    	margin: 0px 5px;
+    	width: calc(100% - 12px);
+    	margin-bottom: 10px;
+    	.label-md{
+    		color: #000;
+    		font-size: 15px;
+    	}
+    	.text-input[disabled]{
+    		opacity: 1;
+    	}
+	}
+	.input-disabled{
+		border: none !important;
+		color: #000;
+		font-size: 15px;
+	}
+}

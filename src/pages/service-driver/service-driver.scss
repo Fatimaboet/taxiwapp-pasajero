@@ -1,0 +1,87 @@
+page-service-driver {
+  .header{
+    background: #034d71;
+    color: #fff;
+    p{
+      font-size: 12px;
+    }
+    .profile-imagen{
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-color: #fff;
+      background-position: center;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+    }
+    .button[mini] {
+      height: 20px;
+      font-size: 1rem;
+      padding: 3px;
+    }
+    button[no-margin] {
+      margin: 15px auto 0 !important;
+    }
+  }
+  .accordion-list {
+    width: 100%;
+    position: absolute;
+    bottom: -32px;
+    z-index: 999;
+    .accordion-header {
+      color: #000;
+
+      .item-inner {
+        margin-left: 0 !important;
+      }
+
+      ion-icon[item-left] {
+        position: absolute;
+        left: calc(50% - 12px);
+        transition: all .25s ease-in;
+        transform: rotate(-90deg);
+      }
+    }
+
+    .active ion-icon[item-left] {
+      transform: rotate(90deg);
+    }
+
+    .accordion-content {
+      transition: 0.3s ease-in-out;
+      background: #fff;
+      border-top: 1px solid #ddd; 
+      &.active {
+          padding: .75rem;
+      }
+    }
+
+    .label {
+      margin: 0px;
+    }
+    .item-md ion-thumbnail ion-img, .item-md ion-thumbnail img, .item-md ion-thumbnail{
+      width: 40px !important;
+      height: 40px !important;
+      min-width: 40px;
+      min-height: 40px;
+    }
+  }
+  .price{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 9999;
+    background: rgba(137, 171, 188, 0.79);
+    padding: 10px 20px;
+    border-radius: 10px;
+    color: #fff;
+  }
+  .footer{
+    background: #59baa7;
+    p{
+      text-align: center;
+      margin: 5px;
+      color: #fff;
+    }
+  }
+}

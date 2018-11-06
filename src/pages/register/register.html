@@ -1,0 +1,237 @@
+<!--
+  Generated template for the RegisterPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-content>
+  <div class="content">
+    <form [formGroup]="form" (ngSubmit)="register()">
+      <ion-row>
+        <ion-col col-12 col-sm-6 offset-sm-3 col-lg-4 offset-lg-4 no-padding>
+          <ion-slides pager (ionSlideWillChange)="slideChanged($event)">
+            <ion-slide>
+              <ion-card>
+                <ion-header no-padding>
+                  <ion-row>
+                    <ion-col col-12 no-padding (click)="addImagen()">
+                      <div class="profile-imagen" 
+                      [ngStyle]="{'background': 'url(' + (imagen || '../../assets/imgs/back-perfil.png') + ') center center / cover no-repeat'}"></div>
+                    </ion-col>
+                    <div *ngIf="editImagen">
+                      <document-image [editImagen]="editImagen" form="circle" (event)="changeImagen($event)"></document-image>
+                    </div>
+                  </ion-row>
+                </ion-header>
+                <ion-card-content>
+                  <ion-card-title>
+                    {{ 'enterData' | translate }}
+                  </ion-card-title>
+                  <ion-list>
+                    <ion-item>
+                      <ion-input type="text" formControlName="name" placeholder="{{ 'name' | translate }}"></ion-input>
+                    </ion-item>
+                    <small class="msg-error-input" *ngIf="validate('name')">{{ 'nameValid' | translate }}</small>
+                    <ion-item>
+                      <ion-input type="text" formControlName="lastname" placeholder="{{ 'lastname' | translate }}"></ion-input>
+                    </ion-item>
+                    <small class="msg-error-input" *ngIf="validate('lastname')">{{ 'lastnameValid' | translate }}</small>
+                    <ion-item>
+                      <ion-select formControlName="gender" placeholder="{{ 'gender' | translate }}">
+                        <ion-option [value]="gender.id" *ngFor="let gender of genders">{{ gender.genero }}</ion-option>
+                      </ion-select>
+                    </ion-item>
+                    <ion-item>
+                    <ion-icon name="calendar" item-end></ion-icon>
+                      <ion-datetime displayFormat="DD/MMM/YYYY" doneText="{{ 'ok' | translate }}" cancelText="{{ 'cancel' | translate }}" formControlName="birthdate" placeholder="{{ 'birthdate' | translate }}"></ion-datetime>
+                    </ion-item>
+                    <ion-grid>
+                      <ion-row>
+                        <ion-col col-3>
+                          <div>
+                            <!-- <img src="../../assets/imgs/es.png"> -->
+                            <ion-select formControlName="codeCountry">
+                              <ion-option *ngFor="let cc of codeCountries" value="{{ cc.idPais }}">
+                                <!-- <span class='flag-icon flag-icon-{{ cc.esp.slice(0, -1) }}'></span> -->
+                                {{ cc.esp }}
+                              </ion-option>
+                            </ion-select>
+                          </div>
+                        </ion-col>
+                        <ion-col col-6>
+                          <ion-input type="text" formControlName="phone" placeholder="+52 777 3252525"></ion-input>
+                        </ion-col>
+                        <!-- <ion-col col-3>
+                          <button type="button" ion-button small>{{ 'sendcode' | translate }}</button>
+                        </ion-col> -->
+                      </ion-row>
+                    </ion-grid>
+                   <!--  <ion-grid>
+                      <ion-row>
+                        <ion-col col-5 class="center-vertically">
+                          <label>{{ 'enterCode' | translate }}</label>
+                        </ion-col>
+                        <ion-col col-4>
+                          <ion-input type="text" formControlName="code" placeholder="****"></ion-input>
+                        </ion-col>
+                        <ion-col col-3>
+                          <button type="button" ion-button small>{{ 'check' | translate }}</button>
+                        </ion-col>
+                      </ion-row>
+                    </ion-grid> -->
+                  </ion-list>
+                  <p class="step-number">{{ 'step' | translate }} 1 {{ 'of' | translate }} 5</p>
+                </ion-card-content>
+              </ion-card>
+            </ion-slide>
+            <ion-slide>
+              <ion-card>
+                <ion-card-content>
+                  <ion-list>
+                    <ion-item>
+                      <ion-label stacked>{{ 'email' | translate }}</ion-label>
+                      <ion-input type="email" formControlName="email" placeholder="{{ 'example' | translate }}"></ion-input>
+                    </ion-item>
+                    <small class="msg-error-input" *ngIf="validate('email')">{{ 'emailValid' | translate }}</small>
+
+                    <ion-item>
+                      <ion-label stacked>{{ 'confirmEmail' | translate }}</ion-label>
+                      <ion-input type="email" formControlName="confirmEmail" placeholder="{{ 'example' | translate }}"></ion-input>
+                    </ion-item>
+                    <small class="msg-error-input" *ngIf="confirm('email', 'confirmEmail')">{{ 'noMatch' | translate }}</small>
+
+                    <ion-item>
+                      <ion-label stacked>{{ 'password' | translate }}</ion-label>
+                      <ion-input type="password" formControlName="pass" placeholder="*********"></ion-input>
+                    </ion-item>
+                    <small class="msg-error-input" *ngIf="validate('pass')">{{ 'passValid' | translate }}</small>
+
+                    <ion-item>
+                      <ion-label stacked>{{ 'confirmPassword' | translate }}</ion-label>
+                      <ion-input type="password" formControlName="confirmPass" placeholder="*********"></ion-input>
+                    </ion-item>
+                    <small class="msg-error-input" *ngIf="confirm('pass', 'confirmPass')">{{ 'noMatch' | translate }}</small>
+
+                    <ion-item>
+                      <button type="submit" ion-button full>{{ 'ok' | translate }}</button>
+                    </ion-item>
+                  </ion-list>
+                  <p class="step-number">{{ 'step' | translate }} 1 {{ 'of' | translate }} 5</p>
+                </ion-card-content>
+              </ion-card>
+            </ion-slide>
+            <ion-slide>
+              <div class="msg-edit-imagen"><h5>{{ 'register2' | translate }}</h5></div>
+              <document-image [editImagen]="true" (event)="changeDni($event)"></document-image>
+              <p class="step-number">{{ 'step' | translate }} 2 {{ 'of' | translate }} 5</p>
+            </ion-slide>
+            <ion-slide>
+              <div class="content">
+                <div class="msg-edit-imagen danger"><h5>{{ 'serurityContact' | translate}}</h5></div>
+                <ion-item>
+                  <ion-label>{{ 'sharedContacts' | translate }}</ion-label>
+                  <ion-toggle formControlName="compartirMiViaje"></ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-label>{{ 'contactSOS' | translate }}</ion-label>
+                  <ion-toggle formControlName="avisarSiSOS"></ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-label>{{ 'seguritySOS' | translate }}</ion-label>
+                  <ion-toggle checked="true"></ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-label>{{ 'requestPin' | translate }}</ion-label>
+                  <ion-toggle formControlName="solicitarmePin"></ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-label>{{ 'pinIncorrent' | translate }}</ion-label>
+                  <ion-toggle formControlName="enviarSMSpinINcorrecto"></ion-toggle>
+                </ion-item>
+                <ion-item>
+                  <ion-label stacked>Pin</ion-label>
+                  <ion-input type="password" formControlName="Pin" placeholder="****"></ion-input>
+                </ion-item>
+                <small class="msg-error-input" *ngIf="confirm('Pin', 'confirmPass')">{{ 'pinValid' | translate }}</small>
+                <!-- <button right type="button" color="secondary" ion-fab mini><ion-icon name="add"></ion-icon></button>
+                <table>
+                  <tr>
+                    <th>{{ 'name' | translate }}</th>
+                    <th>{{ 'phone' | translate }}</th> 
+                    <th>{{ 'delete' | translate }}</th>
+                  </tr>
+                  <tr>
+                    <td>Juan</td>
+                    <td>54545454</td> 
+                    <td><button type="button" color="dark" ion-fab mini (click)="addContact()"><ion-icon name="trash"></ion-icon></button></td>
+                  </tr>
+                </table> -->
+                <ion-item style="margin-bottom: 30px;">
+                  <button type="button" ion-button full (click)="contact()">{{ 'ok' | translate }}</button>
+                </ion-item>
+                <ion-item>
+                </ion-item>
+                <p class="step-number">{{ 'step' | translate }} 3 {{ 'of' | translate }} 5</p>
+              </div>
+            </ion-slide>
+            <ion-slide>
+              <ion-header>
+                <ion-toolbar class="blue">
+                  <ion-title>
+                    {{ 'paymentMethod' | translate }}
+                  </ion-title>
+                </ion-toolbar>
+              </ion-header>
+              <div class="checkout">
+                <div center style="padding: 100px 0;">
+                  <img src="../../assets/imgs/image10.png" style="width:60px">
+                </div>
+
+                <ion-grid>
+                  <ion-row *ngFor="let method of paymentMethod" (click)="addMethod(method)">
+                    <ion-col col-3 class="icon-pay">
+                      <img *ngIf="method.numero" src="../../assets/imgs/image30.png" style="width:20px">
+                      <img *ngIf="!method.numero" src="../../assets/imgs/image46.png" style="width:20px">
+                    </ion-col>
+                    <ion-col col-6>
+                      <h4 *ngIf="method.numero">{{ method.numero }}</h4>
+                      <h4 *ngIf="!method.numero">Efectivo</h4>
+                    </ion-col>
+                    <ion-col col-3>
+                      <button type="button" (click)="deletePaymentMethod(method)" ion-fab mini color="danger"><ion-icon name="trash"></ion-icon></button>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row (click)="addMethod()">
+                    <ion-col col-3 class="icon-pay">
+                      <ion-icon name="add-circle" color="primary"></ion-icon>
+                    </ion-col>
+                    <ion-col col-6>
+                      <h4>{{ 'add' | translate }}</h4>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+                <p class="step-number">{{ 'step' | translate }} 4 {{ 'of' | translate }} 5</p>
+              </div>
+            </ion-slide>
+            <ion-slide>
+              <ion-item>
+                <ion-label>{{'termConditions' | translate}}</ion-label>
+                <ion-checkbox color="dark" checked="true" formControlName="termConditions"></ion-checkbox>
+              </ion-item>
+              <h4>Gracias por registrarte <br> <a style="color: red">Viaja seguro con TaxiWapp</a></h4>
+              <ion-item style="position: absolute;bottom: 30px;">
+                <button type="button" [disabled]="!form.value.termConditions" ion-button full (click)="setTermConditions()">{{ 'enter' | translate }}</button>
+              </ion-item>
+              <p class="step-number" style="text-align: center;bottom: 100px;">{{ 'step' | translate }} 5 {{ 'of' | translate }} 5</p>
+            </ion-slide>
+          </ion-slides>
+          <div class="cancel">
+              <button type="button" color="danger" ion-fab mini (click)="goBack()">
+                <ion-icon name="close" ></ion-icon>
+              </button>
+            </div>
+        </ion-col>
+      </ion-row>
+    </form>
+  </div>
+</ion-content>

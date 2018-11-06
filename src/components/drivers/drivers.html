@@ -1,0 +1,47 @@
+<ion-grid>
+  <ion-row>
+    <ion-col col-2 padding>
+      <img *ngIf="payment?.numero" src="../../assets/imgs/image30.png" style="width:30px">
+      <img *ngIf="!payment?.numero" src="../../assets/imgs/image46.png" style="width:30px">
+    </ion-col>
+    <ion-col col-5 no-padding>
+     <h5>{{ 'method' | translate }}</h5>
+    </ion-col>
+    <ion-col col-3 no-padding>
+     <h6>{{ payment?.numero }}</h6>
+    </ion-col>
+    <ion-col col-1 padding>
+      <a (click)="goPayments()"><h5>></h5></a>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+<table class="table table-borderless" *ngIf="data.length">
+  <thead>
+    <tr>
+      <th colspan="2">{{'driver' | translate}}</th>
+      <th>{{'car' | translate}}</th>
+      <th>{{'time' | translate}}</th>
+      <th>{{'rate' | translate}}</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let driver of data" (click)="selectDriver(driver)">
+      <td>
+        <ion-avatar item-start>
+          <img [src]="route + driver.foto">
+        </ion-avatar>
+      </td>
+      <td>
+        {{ driver.nombre }}<br>
+        <ion-icon name="star"></ion-icon> {{ driver.calificacionPromedio }}
+      </td>
+      <td>{{ driver.Modelo }}</td>
+      <td>{{ driver.tiempo }}</td>
+      <td>{{ driver.costoinicial }}</td>
+      <td><button ion-fab mini color="danger"><ion-icon name="trash"></ion-icon></button></td>
+    </tr>
+  </tbody>
+</table>
+<div *ngIf="!data.length"><h6 text-center>No hay conductores cerca de tí</h6></div>
+

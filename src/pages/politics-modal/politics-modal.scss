@@ -1,0 +1,19 @@
+page-politics-modal {
+	.toolbar-background-md, .toolbar-background-ios{
+		background-color: #194d71;
+		border-color: transparent;
+	}
+	.toolbar-title-md, .toolbar-title-ios{
+		color: #ffffff;
+	}
+	.content-iframe{
+		width: 100%;
+		height: 85%;
+		overflow:scroll !important;
+		-webkit-overflow-scrolling:touch !important;
+	}
+	.iframe-terms{
+		width: 100%;
+		height: 100%;
+	}
+}

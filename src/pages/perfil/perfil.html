@@ -1,0 +1,115 @@
+<!--
+  Generated template for the ProfilePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{ 'editProfile' | translate }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+	<div class="header-profile" [ngStyle]="{'background': 'linear-gradient(0deg, rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url(' + image + ') center center / cover no-repeat'}" >
+    	<img [src]="image" alt="usuario" class="img-profile" (click)="editImagen = true">
+    	<img src="../../assets/imgs/camara.png" class="icon-edit" (click)="editImagen = true">
+    	<document-image [editImagen]="editImagen" form="circle" (event)="changeImagen($event)"></document-image>
+  	</div>
+  	<form [formGroup]="dataUserForm" novalidate>
+        <ion-row>
+          <ion-col col-12 col-sm-8 offset-sm-2 col-lg-4 offset-lg-4 no-padding>
+            <ion-list>
+            	<ion-item class="item-disabled">
+            		<ion-label>{{ 'name' | translate }}</ion-label>
+	                <ion-input type="text" class="input-disabled" formControlName="nombre"></ion-input>
+	            </ion-item>
+	            <ion-item class="item-disabled">
+	            	<ion-label>{{ 'lastname' | translate }}</ion-label>
+	                <ion-input type="text" class="input-disabled" formControlName="apellidos"></ion-input>
+	            </ion-item>
+				<ion-item>
+					<ion-select placeholder="{{ 'gender' | translate }}" formControlName="genero" interface="popover" (ionChange)="setGender()">
+					  <ion-option [value]="gender.genero" *ngFor = "let gender of genders">{{gender.genero}}</ion-option>
+					</ion-select>
+				</ion-item>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <!--ion-list class="list-country">
+	        <ion-row>
+				<ion-col col-2 col-sm-1 offset-sm-2 col-lg-1 offset-lg-4 no-padding>
+					<ion-item class="imageselect image_{{dataUserForm.value.idPaisTelefono}}">
+						<ion-select class="select-country" (click)="prepareImageSelector()" formControlName="idPaisTelefono" cancelText="{{ 'cancel' | translate }}" okText="{{ 'ok' | translate }}">
+							<ion-option (ionSelect)="selectImage(optionimage)" *ngFor="let optionimage of images" [value]="optionimage">{{optionimage}}</ion-option>
+						</ion-select>
+					</ion-item>
+				</ion-col>
+				<ion-col col-6 col-sm-5 col-lg-2>
+						<ion-input type="number" formControlName="contrasena"></ion-input>
+				</ion-col>
+				<ion-col col-4 col-sm-2 col-lg-1>
+						<button class="button-send" ion-button color="secondary">{{ 'sendcode' | translate }}</button>
+				</ion-col>
+			</ion-row>
+	        <ion-row class="mt-10">
+				<ion-col col-4 col-sm-1 offset-sm-2 col-lg-1 offset-lg-4 no-padding>
+					<p class="text-code">{{ 'enterCode' | translate }}</p>
+				</ion-col>
+				<ion-col col-4 col-sm-5 col-lg-2>
+						<ion-input type="number" formControlName="contrasena"></ion-input>
+						<small class="msg-error-input" *ngIf="validate('apellidos')">{{ 'passValid' | translate }}</small>
+				</ion-col>
+				<ion-col col-4 col-sm-2 col-lg-1>
+						<button ion-button class="text-verify" color="secondary">{{ 'check' | translate }}</button>
+				</ion-col>
+			</ion-row>
+		</ion-list-->
+		<ion-row>
+          <ion-col col-12 col-sm-8 offset-sm-2 col-lg-4 offset-lg-4 no-padding>
+            <ion-list class="list-country list-items">
+            	<ion-item (click)="presentConfirm('Correo electrónico',infoUser.correoElectronico,0,'Correo electrónico')">
+				    <ion-label stacked>
+				      {{ 'email' | translate }}
+				    </ion-label>
+				    <div item-content>
+				      <p>{{ userInfo.email }}</p>
+				    </div>
+				    <ion-icon class="color-gray" ios="ios-arrow-forward" md="ios-arrow-forward" item-end></ion-icon>
+				</ion-item>
+				<!--ion-item (click)="presentConfirm('Correo enlazado','',1,'Correo enlazado')">
+				    <ion-label stacked>
+				      {{ 'linkedMail' | translate }}
+				    </ion-label>
+				    <div item-content>
+				      <p></p>
+				    </div>
+				    <ion-icon class="color-gray" ios="ios-arrow-forward" md="ios-arrow-forward" item-end></ion-icon>
+				</ion-item-->
+				<ion-item (click)="presentConfirm('Contraseña','',2,'Contraseña')">
+				    <ion-label stacked>
+				      {{ 'password' | translate }}
+				    </ion-label>
+				    <div item-content>
+				      <p>·······</p>
+				    </div>
+				    <ion-icon class="color-gray" ios="ios-arrow-forward" md="ios-arrow-forward" item-end></ion-icon>
+				</ion-item>
+				<!--ion-item>
+				    <ion-label stacked>
+				      {{ 'oficialIdentify' | translate }}
+				    </ion-label>
+				    <div item-content>
+				      <p></p>
+				    </div>
+				    <ion-icon class="color-gray" ios="ios-arrow-forward" md="ios-arrow-forward" item-end></ion-icon>
+				</ion-item-->
+            </ion-list>
+          </ion-col>
+        </ion-row>
+        <ion-fab center>
+		    <button ion-fab mini color="danger" (click)="goBack()"><ion-icon ios="md-close" md="md-close"></ion-icon></button>
+		</ion-fab>
+    </form>
+</ion-content>
