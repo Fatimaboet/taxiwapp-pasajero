@@ -68,7 +68,7 @@ export class MyApp {
     if (localStorage.getItem('idUsuario')) {
       this.auth.getUser().subscribe(
         resp => {
-          console.log(resp)
+          //console.log(resp)
           this.user = resp.recordset[0];
           if (resp.recordset[0]) {
             this.image = environment.documents + resp.recordset[0].ruta +'?'+ new Date().getTime()

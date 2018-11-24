@@ -1,0 +1,71 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button clear (click)="close()"><ion-icon ios="md-arrow-back" md="md-arrow-back" class="icon-arrow"></ion-icon></button>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-list>
+  	<ion-list-header color="light">
+      {{'originDest' | translate}}
+    </ion-list-header>
+  	<ion-grid class="header">
+      <ion-row>
+        <ion-col col-12>
+          <ion-input type="text" [(ngModel)]="dateTrip.start" disabled="true"></ion-input>
+        </ion-col>
+        <ion-col col-12>
+          <ion-input type="text" [(ngModel)]="dateTrip.finish" disabled="true"></ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-list-header color="light">
+      {{'typeService' | translate}}
+    </ion-list-header>
+    <ion-row text-center class="select-service-type">
+        <ion-col col-4 class="typeCar" *ngFor="let type of typeServices; let i = index" [ngClass]="{'selected-type': type.idTipoServicio == idTipoServicio}">
+          <a (click)="setTypeService(type.idTipoServicio)">
+            <img *ngIf="type.idTipoServicio == 1" src="./assets/imgs/libre.png">
+            <img *ngIf="type.idTipoServicio == 2" src="./assets/imgs/sitio.png">
+            <img *ngIf="type.idTipoServicio == 3" src="./assets/imgs/radio.png">
+            <img *ngIf="type.idTipoServicio > 3" src="./assets/imgs/car.png">
+            <h5 class="text-type">{{ type.descripcion }}</h5>
+            <h5 class="price-type">${{ type.costoInicial }}</h5>
+          </a>
+        </ion-col>
+    </ion-row>
+    <ion-list-header color="light">
+      {{'method' | translate}}
+    </ion-list-header>
+    <ion-grid>
+	  <ion-row (click)="goPayments()">
+	    <ion-col col-2 class="item-pay">
+	      <img *ngIf="payment?.numero != 'Efectivo'" src="../../assets/imgs/image30.png" style="width:30px">
+	      <img *ngIf="payment?.numero == 'Efectivo'" src="../../assets/imgs/image46.png" style="width:30px">
+	    </ion-col>
+	    <ion-col col-5 no-padding class="item-pay">
+	     <h5 class="text-method">{{ 'method' | translate }}</h5>
+	    </ion-col>
+	    <ion-col col-4 no-padding class="item-pay">
+	     <h6>{{ payment?.numero }}</h6>
+	    </ion-col>
+	    <ion-col col-1 class="item-pay">
+	      <ion-icon style="font-size: 22px;" ios="ios-arrow-forward" md="ios-arrow-forward"></ion-icon>
+	    </ion-col>
+	  </ion-row>
+	</ion-grid>
+	<br><br>
+	<ion-grid>
+	  <ion-row>
+	    <ion-col col-10 class="item-pay">
+	      <button ion-button full color="secondary" (click)="send()">{{ 'requestService' | translate }}</button>
+	    </ion-col>
+	    <ion-col col-2 class="item-pay">
+	      <button type="button" ion-fab mini color="white" (click)="picker.open()">
+            <img src="./assets/imgs/calendar.png">
+          </button>
+          <ion-datetime class="d-none" #picker doneText="{{ 'ok' | translate }}" cancelText="{{ 'cancel' | translate }}" pickerFormat="DD-MMMM hh:mm A" [(ngModel)]="dateTrip.date" [min]="minDate" [max]="maxDate"></ion-datetime>
+	    </ion-col>
+	  </ion-row>
+	</ion-grid>
+  </ion-list>
+</ion-content>

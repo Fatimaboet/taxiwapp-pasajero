@@ -48,6 +48,7 @@ import { DriversComponent } from '../components/drivers/drivers';
 import { PaymentMethodComponent } from '../components/payment-method/payment-method';
 import { FinishServiceComponent } from '../components/finish-service/finish-service';
 import { Segurity1Component } from '../components/segurity/segurity';
+import { TypeServiceComponent } from '../components/type-service/type-service';
 
 const pages = [
   HomePage,
@@ -73,7 +74,8 @@ const pages = [
   PoliticsPage,
   PoliticsModalPage,
   HelpPage,
-  Segurity1Component
+  Segurity1Component,
+  TypeServiceComponent
 ];
 
 

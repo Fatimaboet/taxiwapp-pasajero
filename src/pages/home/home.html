@@ -1,7 +1,7 @@
-<form [formGroup]="form" (ngSubmit)="submit()">
+<form [formGroup]="form">
   <ion-header>
     <ion-grid class="header" *ngIf="service?.idEstatusViaje == 0" [ngClass]="{'blue': addDescriptionFavorite}">
-      <ion-row *ngIf="!selectTypeService&&!addDescriptionFavorite">
+      <!--ion-row *ngIf="!selectTypeService&&!addDescriptionFavorite">
         <ion-col col-6 no-padding>
           <ion-input type="text" formControlName="start" placeholder="{{'from' | translate}}" (ionFocus)="addLocation('start')"></ion-input>
         </ion-col>
@@ -24,13 +24,18 @@
             <img *ngIf="service?.idTipoServicio > 3 || !service?.idTipoServicio" src="./assets/imgs/car.png">
           </button>
         </ion-col>
-      </ion-row>
+      </ion-row-->
 
-      <ion-row *ngIf="!selectTypeService&&!addDescriptionFavorite">
-        <ion-col col-6 no-padding>
+      <ion-row *ngIf="!selectTypeService&&!addDescriptionFavorite&&!submited">
+        <ion-col col-2 no-padding>
+          <button ion-button icon-only clear menuToggle>
+            <img src="../../assets/imgs/menu.png" class="icon-menus">
+          </button>
+        </ion-col>
+        <ion-col col-10 no-padding>
           <ion-input type="text" formControlName="finish" placeholder="{{'destination' | translate}}" (ionFocus)="addLocation('finish')"></ion-input>
         </ion-col>
-         <ion-col col-2 no-padding>
+         <!--ion-col col-2 no-padding>
           <button type="button" ion-fab mini color="white" clear (click)="addFavorite('finish')">
             <ion-icon name="heart" color="danger" *ngIf="favoriteFinish?.select"></ion-icon>
             <ion-icon name="heart" color="dark" *ngIf="!favoriteFinish?.select"></ion-icon>
@@ -46,11 +51,11 @@
             <img src="./assets/imgs/calendar.png">
           </button>
           <ion-datetime class="d-none" #picker doneText="{{ 'ok' | translate }}" cancelText="{{ 'cancel' | translate }}" pickerFormat="DD-MMMM hh:mm A" formControlName="date" [min]="minDate" [max]="maxDate"></ion-datetime>
-        </ion-col>
+        </ion-col-->
       </ion-row>
 
-      <ion-row *ngIf="selectTypeService" text-center class="select-service-type">
-        <ion-col col-3 *ngFor="let type of typeServices; let i = index">
+      <!--ion-row *ngIf="selectTypeService" text-center class="select-service-type">
+        <ion-col col-3 class="typeCar" *ngFor="let type of typeServices; let i = index">
           <a (click)="setTypeService(type.idTipoServicio)">
             <img *ngIf="type.idTipoServicio == 1" src="./assets/imgs/libre.png">
             <img *ngIf="type.idTipoServicio == 2" src="./assets/imgs/sitio.png">
@@ -59,9 +64,9 @@
             <h5>{{ type.descripcion }}</h5>
           </a>
         </ion-col>
-      </ion-row>
+      </ion-row-->
 
-      <ion-row *ngIf="addDescriptionFavorite" color="dark-blue">
+      <!--ion-row *ngIf="addDescriptionFavorite" color="dark-blue">
        
         <ion-col col-12>
           <ion-label no-margin>{{'saveAs' | translate}}:</ion-label>
@@ -73,7 +78,7 @@
           <button type="button" ion-fab mini color="secondary" (click)="saveFavorite()"><ion-icon name="checkmark"></ion-icon></button>
         </ion-col>
 
-      </ion-row>
+      </ion-row-->
 
     </ion-grid>
     <ion-grid class="header blue" *ngIf="service?.idEstatusViaje > 1">
@@ -108,16 +113,17 @@
   </ion-header>
 </form>
 
- <ion-content>
+ <ion-content class="has-header">
+
+    <button ion-fab mini color="danger" (click)="getPosition()" class="button-geo"><ion-icon ios="md-locate" md="md-locate"></ion-icon></button>
 
     <div class="price" *ngIf="costo > 0">{{ costo | currency:'USD':true }}</div>
-      
-    <button type="button" ion-button menuToggle>
-      <img src="../../assets/imgs/menu.png" class="icon-menus">
-    </button>
 
-    <map (latLng)="setLatLng($event)" [drivers]="drivers" [origin]="service.puntoOrigen" [destiny]="service.puntoDestino"></map>
-    <drivers [data]="drivers" *ngIf="drivers&&submited&&service.idEstatusViaje < 2" [payments]="paymentMethods" (select)="selectDriver($event)"></drivers>
+    <div text-center *ngIf="loader" style="margin-top: 40vh;">
+      <ion-spinner></ion-spinner>
+    </div>
+    <div id="map"></div>
+    <drivers [data]="drivers" *ngIf="drivers&&submited&&service.idEstatusViaje < 1" [payments]="paymentMethods" (select)="selectDriver($event)"></drivers>
 
 
     <ion-list class="accordion-list" *ngIf="service?.idEstatusViaje > 1">
@@ -128,8 +134,8 @@
         <section #accordionContent [class.active]="expanded" class="accordion-content">
           <button ion-item (click)="goPayments()">
             <ion-thumbnail item-start>
-              <img *ngIf="payment?.numero" src="../../assets/imgs/image30.png">
-              <img *ngIf="!payment?.numero" src="../../assets/imgs/image46.png">
+              <img *ngIf="payment?.numero != 'Efectivo'" src="../../assets/imgs/image30.png">
+              <img *ngIf="payment?.numero == 'Efectivo'" src="../../assets/imgs/image46.png">
             </ion-thumbnail>
             {{ payment?.numero || 'efectivo' }}
             <ion-icon item-end name="ios-arrow-forward"></ion-icon>
@@ -166,8 +172,10 @@
 <ion-footer no-padding>
     <!-- <button ion-button full no-margin color="secondary">Gana dinero todos los días</button>
     <p>Invita a tus contactos a utilizar TaxiWapp y gana 1% de cada viaje que realice.</p> -->
-    <button ion-button full *ngIf="service?.idEstatusViaje < 2" (click)="submit()">{{'requestTrip' | translate}} >></button>
+    <!--button ion-button full color="secondary" *ngIf="service?.idEstatusViaje < 2 && submited" (click)="submit()">{{'requestTrip' | translate}} >></button-->
     <!-- <button ion-button full color="danger" *ngIf="saved" type="button" (click)="cancel()"><< {{'cancelTrip' | translate}}</button> -->
+    <button ion-button full *ngIf="service?.idEstatusViaje == 0 && submited" no-margin color="danger" (click)="cancel()"><< Cancelar viaje</button>
+    <button ion-button full *ngIf="service?.idEstatusViaje == 1" no-margin color="danger" (click)="cancelDriver()"><< Cancelar viaje</button>
     <button ion-button full *ngIf="service?.idEstatusViaje == 2" no-margin color="secondary" (click)="initService()">{{ 'startTrip' | translate}}</button>
     <button ion-button full *ngIf="service?.idEstatusViaje > 2" no-margin color="secondary" (click)="setPropine()">{{ 'endTrip' | translate}}>></button>
     <button ion-button full *ngIf="service?.idEstatusViaje > 2" no-margin color="danger" (click)="sos()"><< SOS</button>

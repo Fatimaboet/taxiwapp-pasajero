@@ -1,0 +1,93 @@
+type-service {
+	.bottom-btn{
+		position: fixed;
+		z-index: 999;
+		bottom: 0;
+		left:0;
+		width: 100%;
+		background-color: #fff !important;
+	}
+	.pac-container{
+		width: 80% !important;
+	}
+	.pac-item{
+		text-overflow: initial;
+		overflow: initial;
+		white-space: initial;
+	}
+	.icon-arrow{
+		font-size: 22px;
+	    color: #000;
+	    font-weight: bold;
+	}
+	.text-input[disabled] {
+	    opacity: 1 !important;
+	}
+	.fab-md{
+		margin: 0px !important;
+		box-shadow: none;
+	}
+	.content-heart{
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	.icon-home{
+		font-size: 20px;
+	    color: #9E9E9E;
+	    margin: 0px;
+	};
+	.typeCar{
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    opacity: 0.5;
+	    a{
+	    	img{
+	    		width: 75%;
+	    	}
+	    }
+	};
+	.text-type{
+		color: #607D8B;
+		font-size: 1.4rem;
+		margin-bottom: 3px;
+		margin-top: 5px;
+	};
+	.price-type{
+		color: #607D8B;
+		font-size: 1.5rem;
+		margin-top: 0px;
+	}
+	.selected-type{
+		border: 1px solid #4a708b;
+	    opacity: 1;
+	    border-radius: 5px;
+	    margin-bottom: 12px;
+	    a{
+	    	img{
+	    		width: 80%;
+	    	}
+	    }
+	};
+	.icon-pay{
+		h4{
+			font-size: 16px;
+			margin: 0px;
+		}
+	};
+	.text-method{
+		font-size: 1.6rem;
+		margin: 0px;
+	}
+	.item-pay{
+		display: flex;
+		align-items: center;
+		h6{
+			margin: 0px;
+		}
+	};
+	.datetime-md, .datetime-ios{
+	    display: none;
+	}
+}

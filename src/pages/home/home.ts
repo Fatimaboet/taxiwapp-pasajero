@@ -1,5 +1,5 @@
-import { Component, ViewChild, ElementRef, Renderer } from '@angular/core';
-import { NavController, ModalController, ToastController, Toast, AlertController } from 'ionic-angular';
+import { Component, ViewChild, ElementRef, Renderer, NgZone } from '@angular/core';
+import { Events, NavController, ModalController, ToastController, Toast, AlertController, Platform } from 'ionic-angular';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Vibration } from '@ionic-native/vibration';
 
@@ -28,13 +28,11 @@ import 'rxjs/add/operator/takeWhile';
 import { environment } from '../../environments/environment';
 
 import { Service } from '../../class/service';
-import { Favorite } from '../../class/favorite';
 import { Driver } from '../../class/driver';
 
 import * as moment from 'moment';
 
 declare var google;
-
 
 
 /*6  Viaje Pagado
@@ -61,16 +59,11 @@ export class HomePage {
   public location: string;
 
   public selectTypeService: boolean;
-  public addDescriptionFavorite: boolean;
   public route = environment.documents;
 
   public submited: boolean = false;
 
   public typeServices: Array<any>;
-
-  public favorite: Favorite;
-  public favoriteStart: Favorite = new Favorite();
-  public favoriteFinish: Favorite = new Favorite();
 
   paymentMethods: Array<any> = [];
   payment: any;
@@ -84,7 +77,18 @@ export class HomePage {
 
   pin: string;
 
+  intervalAwait: any;
 
+  loader: boolean = false;
+  map: google.maps.Map;
+  marketsDrivers: Array<any> = [];
+  markers: any = [];
+  marketOrigin: google.maps.Marker;
+  marketDestiny: google.maps.Marker;
+  datos: any;
+
+  directionsDisplay: google.maps.DirectionsRenderer;
+  directionsService: google.maps.DirectionsService;
 
   @ViewChild('accordionContent') elementView: ElementRef;
 
@@ -102,89 +106,406 @@ export class HomePage {
     public toastCtrl: ToastController,
     public translate: TranslateService,
     public alertCtrl: AlertController,
-    private vibration: Vibration
+    private vibration: Vibration,
+    private geolocation: Geolocation,
+    private zone: NgZone,
+    public platform: Platform,
+    public events:Events
   ) {
-
-    this.addDescriptionFavorite = false;
     this.form = new FormGroup({
       "start": new FormControl('', Validators.compose([Validators.required])),
       "finish": new FormControl('', Validators.compose([Validators.required])),
       "date": new FormControl(moment().format('YYYY-MM-DD HH:mm:ss')),
       "favorite": new FormControl(''),
     });
-    console.log({service: this.service})
-    this.getTypeServices();
+    this.directionsDisplay = new google.maps.DirectionsRenderer();
+    this.directionsService = new google.maps.DirectionsService();
+    console.log({service: this.service});
+    this.events.subscribe('trip:Status', data => {
+      console.log(data);
+      this.datos = data;
+      if (this.datos) {
+        this.service.idTipoServicio = this.datos.idTipoServicio;
+        this.service.puntoDestino = this.datos.longitude + ' ' + this.datos.latitude;
+        this.form.patchValue({finish: this.datos.finish});
+        this.form.patchValue({date: this.datos.date});
+        this.addService();
+      }
+    })
   }
 
   ionViewDidLoad() {
-
-    // this.getDrivers();
-    // this.getMethod();
-
+    this.getPosition();
+    //this.getTypeServices();
   }
 
   ionViewCanEnter() {
     return !!this.auth.guardAuthenticated();
   }
 
-  getTypeServices() {
+  /*getTypeServices() {
     this.services.getTypeServices().toPromise().then(
       resp => {
         console.log(resp);
         this.typeServices = resp.recordset;
       },
       error => {
-
       }
     )
-  }
+  };*/
 
-  async getDrivers(location) {
-    await this.services.getDrivers(this.service.idTipoServicio, location).toPromise().then(
+  getPosition(){
+    let latitude: number;
+    let longitude: number;
+    let optionsGPS = {timeout: 13000, enableHighAccuracy: true};
+    this.geolocation.getCurrentPosition().then( response => {
+      latitude = response.coords.latitude;
+      longitude = response.coords.longitude;
+      let location = longitude +' '+ latitude;
+      if (this.service.puntoOrigen) {
+        console.log('entro');
+        this.markers.forEach(value=>{
+          if (value.posRef === 'start') value.setMap(null);
+        });
+        let latLng = new google.maps.LatLng(latitude, longitude);
+        this.createMarker(latLng,'start',true,null,'Origen');
+      } else {
+        this.loadMap(latitude, longitude);
+      }    
+      this.geocodeLatLng(latitude,longitude);
+      this.getDrivers(location);
+    })
+    .catch(error =>{
+      if (navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          latitude = position.coords.latitude;
+          longitude = position.coords.longitude;
+          let location = longitude +' '+ latitude;
+          if (this.service.puntoOrigen) {
+            this.markers.forEach(value=>{
+              if (value.posRef === 'start') value.setMap(null);
+            });
+            let latLng = new google.maps.LatLng(latitude, longitude);
+            this.createMarker(latLng,'start',true,null,'Origen');
+          } else {
+            this.loadMap(latitude, longitude);
+          } 
+          this.geocodeLatLng(latitude,longitude);
+          this.getDrivers(location);
+        });
+      } else {
+        if(google.loader.ClientLocation) {
+          latitude = google.loader.ClientLocation.latitude;
+          longitude = google.loader.ClientLocation.longitude;
+          let location = longitude +' '+ latitude;
+          if (this.service.puntoOrigen) {
+            this.markers.forEach(value=>{
+              if (value.posRef === 'start') value.setMap(null);
+            });
+            let latLng = new google.maps.LatLng(latitude, longitude);
+            this.createMarker(latLng,'start',true,null,'Origen');
+          } else {
+            this.loadMap(latitude, longitude);
+          } 
+          this.geocodeLatLng(latitude,longitude);
+          this.getDrivers(location);
+        }
+      }
+    })
+  };
+
+  loadMap(latitude: number, longitude: number){
+    let myLatLng = {lat: latitude, lng: longitude};
+    let mapEle: HTMLElement = document.getElementById('map');
+    
+    this.map = new google.maps.Map(mapEle, {
+      center: myLatLng,
+      zoom: 16,
+      styles: [
+        {
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#f5f5f5"
+            }
+          ]
+        },
+        {
+          "elementType": "labels.icon",
+          "stylers": [
+            {
+              "visibility": "off"
+            }
+          ]
+        },
+        {
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#616161"
+            }
+          ]
+        },
+        {
+          "elementType": "labels.text.stroke",
+          "stylers": [
+            {
+              "color": "#f5f5f5"
+            }
+          ]
+        },
+        {
+          "featureType": "administrative.land_parcel",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#bdbdbd"
+            }
+          ]
+        },
+        {
+          "featureType": "poi",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#eeeeee"
+            }
+          ]
+        },
+        {
+          "featureType": "poi",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#757575"
+            }
+          ]
+        },
+        {
+          "featureType": "poi.park",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#e5e5e5"
+            }
+          ]
+        },
+        {
+          "featureType": "poi.park",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#9e9e9e"
+            }
+          ]
+        },
+        {
+          "featureType": "road",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#ffffff"
+            }
+          ]
+        },
+        {
+          "featureType": "road.arterial",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#757575"
+            }
+          ]
+        },
+        {
+          "featureType": "road.highway",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#e1f5fe"
+            }
+          ]
+        },
+        {
+          "featureType": "road.highway",
+          "elementType": "geometry.stroke",
+          "stylers": [
+            {
+              "color": "#b3e5fc"
+            }
+          ]
+        },
+        {
+          "featureType": "road.highway",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#616161"
+            }
+          ]
+        },
+        {
+          "featureType": "road.local",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#9e9e9e"
+            }
+          ]
+        },
+        {
+          "featureType": "transit.line",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#e5e5e5"
+            }
+          ]
+        },
+        {
+          "featureType": "transit.station",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#eeeeee"
+            }
+          ]
+        },
+        {
+          "featureType": "water",
+          "elementType": "geometry",
+          "stylers": [
+            {
+              "color": "#c9c9c9"
+            }
+          ]
+        },
+        {
+          "featureType": "water",
+          "elementType": "labels.text.fill",
+          "stylers": [
+            {
+              "color": "#9e9e9e"
+            }
+          ]
+        }
+      ]  
+    });
+    google.maps.event.addListenerOnce(this.map, 'idle', () => {
+      this.createMarker(myLatLng,'start',true,null,'Origen');    
+      mapEle.classList.add('show-map');
+      this.loader = false;
+    });
+  };
+
+  createMarker(latlng, posRef, draggable, icons, title) {
+    var marker = new google.maps.Marker({
+      position: latlng,
+      map: this.map,
+      draggable: draggable,
+      posRef: posRef,
+      title: title
+    });
+    this.markers.push(marker);
+    var that = this;
+    this.map.setCenter(latlng);
+    google.maps.event.addListener(marker, 'dragend', function() {
+      var point = this.getPosition();
+      that.map.setCenter(point);
+      that.geocodeLatLng(point.lat(),point.lng());
+    });
+  };
+
+  geocodeLatLng(lat,lng) {
+    var end = {lat: lat, lng: lng};
+    var that = this;
+    let geocoder = new google.maps.Geocoder;
+    geocoder.geocode({'location': end}, function(results, status) {
+      if (status === 'OK') {
+        if (results[1]) {
+          that.form.patchValue({start: results[1].formatted_address});
+          that.service.puntoOrigen = lng + ' ' + lat;
+          /*if (that.service.puntoOrigen && that.service.puntoDestino) {
+            let lat1 = that.service.puntoOrigen.split(" ")[1];
+            let lng1 = that.service.puntoOrigen.split(" ")[0];
+            let lat2 = that.service.puntoDestino.split(" ")[1];
+            let lng2 = that.service.puntoDestino.split(" ")[0];
+            that.shortestRoute(new google.maps.LatLng(lat1, lng1),new google.maps.LatLng(lat2, lng2));
+          }*/
+        } 
+      }
+    });
+  };
+
+  getDrivers(location) {
+    this.services.getDrivers(this.service.idTipoServicio, location).toPromise().then(
       resp => {
         console.log(resp);
-        return this.drivers = resp.recordset;
+        this.drivers = resp.recordset;
+        this.clearMarket();
+        this.setDriversPositions();
       },
       error => {
       }
     )
-  }
+  };
 
-  setPosition(control: string) {
-    let lat = this.lat;
-    let lng = this.lng;
-    let geocoder = new google.maps.Geocoder;
-    console.log({lat, lng, control});
-    geocoder.geocode({'location': {lat, lng}}, (results, status) => {
-      if (status === 'OK') {
-        console.log(results)
-        this.form.controls[control].setValue(results[0].formatted_address);
-        let coord = lng +' '+ lat;
-        if (control === "start") {
-          this.service.puntoOrigen = coord;
-        } else {
-          this.service.puntoDestino = coord;
-        }
-      } else {
-        // window.alert('Geocoder failed due to: ' + status);
-      }
+  clearMarket(){
+    this.marketsDrivers.forEach(value=>{
+      if (value) value.setMap(null);
+    })
+  };
+  
+  setDriversPositions(){
+    this.marketsDrivers = [];
+    let imagen = '../../assets/imgs/pin-car.png';
+    console.log(this.drivers);
+    this.drivers.forEach((value: any)=>{
+      if (value) {
+        if (value.UbicacionConductor) {
+          console.log(value.UbicacionConductor)
+          let point = new google.maps.LatLng(value.UbicacionConductor.split(" ")[1],value.UbicacionConductor.split(" ")[0]);
+          let label = '';
+          let marker = this.setMarker(point, label, imagen);
+          this.marketsDrivers.push(marker);
+        };
+      };
     });
   }
 
-  setTypeService(id){
-    this.service.idTipoServicio = id;
-    this.selectTypeService = false;
+  setMarker(position, label, imagen?) {
+    return new google.maps.Marker({
+      position: position,
+      map: this.map,
+      title: 'Position',
+      icon: imagen || false,
+      label: label,
+      labelClass: "labels",
+    });
   }
 
-  setLatLng(latLng){
-    this.lat = latLng.lat;
-    this.lng = latLng.lng;
-    this.location = latLng.lng +' '+ latLng.lat;
-    this.getDrivers(this.location);
+  shortestRoute(latLngOrigin:google.maps.LatLng, latLngDestiny:google.maps.LatLng) { 
+    this.directionsDisplay.setMap(this.map);
+    this.directionsService.route({
+        origin: latLngOrigin,
+        destination: latLngDestiny,
+        avoidTolls: true,
+        travelMode: google.maps.TravelMode.DRIVING
+    }, (response, status) => {
+        if (status === google.maps.DirectionsStatus.OK) {
+          this.directionsDisplay.setDirections(response);
+          this.directionsDisplay.setOptions({
+            suppressMarkers: true,
+            preserveViewport: true,
+            polylineOptions: { strokeColor: "#03a9f4" }
+          });
+        } else {
+        }
+    });
   }
 
   addLocation(control: string) {
-    const modal = this.modalCtrl.create(FavoriteLocationComponent);
+    const modal = this.modalCtrl.create(FavoriteLocationComponent, {start: this.form.value.start});
     modal.onDidDismiss(data => {
       if (data) {
         this.form.controls[control].setValue(data.text);
@@ -199,53 +520,7 @@ export class HomePage {
       }
     });
     modal.present();
-  }
-
-  addFavorite(control: string){
-    if (!this.form.controls[control].value) {
-      this.base.showToast('addaddressBefore')
-    } else {
-      if (control=='start') {
-        this.favoriteStart = {
-          select: true,
-          Descripcion: '',
-          Direccion: this.form.controls[control].value,
-          puntoGeografico: this.service.puntoOrigen,
-        };
-        this.favorite = this.favoriteStart;
-      } else {
-        this.favoriteFinish = {
-          select: true,
-          Descripcion: '',
-          Direccion: this.form.controls[control].value,
-          puntoGeografico: this.service.puntoDestino,
-        };
-        this.favorite = this.favoriteFinish;
-      }
-      this.addDescriptionFavorite = true;
-    }
-  }
-
-  saveFavorite(){
-    this.favorite.Descripcion = this.form.value.favorite;
-    this.addDescriptionFavorite = false;
-    if (this.favorite.Descripcion) {
-      this.services.addFavorite(this.favorite).toPromise().then(
-        resp => {
-          if(resp.recordset[0].idUbicacionFavorita){
-            this.base.showToast('placesavedFavorites');
-          } else {
-            this.base.showToast('Error',"alert");
-          }
-        },
-        error => {
-          this.base.showToast('Error',"alert");
-        }
-      );
-    } else {
-      this.base.showToast('completeFields');
-    }
-  }
+  };
 
   toggleAccordion() {
     this.expanded = !this.expanded;
@@ -258,7 +533,11 @@ export class HomePage {
     modal.present();
     modal.onDidDismiss((method) => {
       if (method) {
-        this.payment = method;
+        if (method.numero) {
+          this.payment = method;
+        } else {
+          this.payment.numero = 'Efectivo';
+        }
       }
     })
   }
@@ -298,59 +577,60 @@ export class HomePage {
     }
   }
 
-  async saveService(){
+  saveService(){
     if (this.form.invalid || !this.service.idTipoServicio || !this.service.puntoOrigen || !this.service.puntoDestino) {
       this.base.showToast('completeFields');
     } else if (!this.driver)
       this.base.showToast('selecione un conductor');
     else {
       console.log(this.form.value.date);
-      this.service.fechaHoraSolicitud = new Date(this.form.value.date).toISOString();
+      if (this.form.value.date != '') {
+        this.service.fechaHoraSolicitud = new Date(this.form.value.date).toISOString();
+      }     
       this.base.startLoading();
-      await this.services.addService(this.service).toPromise().then(
+      this.services.addService(this.service).toPromise().then(
         resp => {
-          this.service.id = resp.recordset[0].idViajes;
+          console.log(resp);
+          if (resp.recordset) {
+            this.service.id = resp.recordset[0].idViajes;
+            this.services.addDriverService({id: this.service.id, idConductor: this.driver.idConductor, idVehiculo: this.driver.idVehiculo})
+            .toPromise().then(
+              resp => {
+                this.base.showToast('El conductor ha sido invitado con exito');
+                this.service.idEstatusViaje = 1;
+                this.awaitDriver();
+              },
+              error => {
+                console.log(error);
+                this.base.showToast('error', 'alert');
+              }
+            );
+            this.base.stopLoading();
+          }
         },
         error => {
+          console.log(error);
           this.base.showToast('error', 'alert');
         }
       );
-
-      if (this.service.id) {
-        await this.services.addDriverService({id: this.service.id, idConductor: this.driver.idConductor, idVehiculo: this.driver.idVehiculo})
-          .toPromise().then(
-            resp => {
-              this.base.showToast('El conductor ha sido invitado con exito');
-              this.service.idEstatusViaje = 1;
-              this.awaitDriver();
-            },
-            error => {
-              this.base.showToast('error', 'alert');
-            }
-        )
-      } else {
-        this.base.showToast('error','alert');
-      }
-      this.base.stopLoading();
-    }
-
-  }
+    };
+  };
 
   selectDriver(driver){
     console.log(driver);
     this.driver = driver;
+    this.saveService();
   }
  
-
   selectDriverNot(){
     this.translate.get("selectDriver").subscribe(
       value => {
         this.toast = this.toastCtrl.create({
           message: value,
           position: "top",
-          cssClass: "warning",
-          showCloseButton: true,
-          closeButtonText: "cancelar"
+          cssClass: "warning"
+          //showCloseButton: true,
+          //closeButtonText: "cancelar"
         });
         this.toast.present();
         this.toast.onDidDismiss(()=>{
@@ -363,11 +643,13 @@ export class HomePage {
   cancel(){
     console.log(this.service);
     if(this.service.idEstatusViaje == 0){
+      if (this.toast) this.toast.dismiss(); 
       this.service = new Service();
       this.form.reset();
       this.drivers = null;
       this.submited = false;
-      this.service.idEstatusViaje = 0;
+      this.service.idEstatusViaje = 0; 
+      this.getPosition();   
     }
   }
 
@@ -379,9 +661,9 @@ export class HomePage {
         this.toast = this.toastCtrl.create({
           message: value,
           position: "top",
-          cssClass: "warning",
-          showCloseButton: true,
-          closeButtonText: "cancelar"
+          cssClass: "warning"
+          //showCloseButton: true,
+          //closeButtonText: "cancelar"
         });
         this.toast.present();
         this.toast.onDidDismiss(()=>{
@@ -398,11 +680,13 @@ export class HomePage {
       //this.selectDriverNot();
       this.services.cancelDriverTravel(this.service.id).subscribe(
         resp => {
+          if (this.toast) this.toast.dismiss();
           this.base.showToast('Viaje cancelado');
           this.service = new Service();
           this.form.reset();
           this.drivers = null;
           this.submited = false;
+          this.getPosition();
         },
         error => {
           this.base.showToast('Error', 'alert');
@@ -594,6 +878,7 @@ export class HomePage {
           this.drivers = null;
           this.submited = false;
           this.costo = 0;
+          this.getPosition();
         },
         error => this.base.showToast('Error', 'alert')
       );

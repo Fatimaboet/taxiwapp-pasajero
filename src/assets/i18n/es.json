@@ -76,7 +76,7 @@
  	"acceptTerms": "Debe aceptar los terminos y condiciones",
  	"registeredApp": "Registrado con exito ya puede usar la app",
  	"from": "De",
- 	"destination": "Destino",
+ 	"destination": "A donde quieres llegar",
 	"exampleHouse": "Ejemplo: casa, trabajo",
 	"example": "Ejemplo@gmail.com",
 	"step": "Paso",
@@ -104,5 +104,8 @@
  	"program": "Programados",
  	"terms": "Términos y condiciones",
  	"help": "Ayuda",
- 	"policy": "Política"
+ 	"policy": "Política",
+ 	"typeService": "Tipo de servicio",
+ 	"originDest": "Origen - Destino",
+ 	"requestService": "Solicitar servicio"
 }

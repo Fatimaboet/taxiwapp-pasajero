@@ -1,18 +1,38 @@
 <ion-header>
   <ion-navbar>
-    <ion-grid class="header">
-      <ion-row>
-        <ion-col col-8>
-          <ion-input id="places" type="text" name="search" #places></ion-input>
-        </ion-col>
-        <ion-col col-4>
-          <button ion-button clear (click)="close()">{{'cancel' | translate}}</button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <button ion-button clear (click)="close()"><ion-icon ios="md-arrow-back" md="md-arrow-back" class="icon-arrow"></ion-icon></button>
   </ion-navbar>
 </ion-header>
 <ion-content>
+  <ion-grid class="header">
+      <ion-row *ngIf="!addDescriptionFavorite">
+        <ion-col col-12>
+          <ion-input type="text" [(ngModel)]="directions.start" placeholder="{{'from' | translate}}" disabled="true"></ion-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-10>
+          <ion-input id="places" type="text" name="search" #places [(ngModel)]="directions.finish" placeholder="Ingresa una dirección de destino"></ion-input>
+        </ion-col>
+        <ion-col col-2 class="content-heart">
+          <button type="button" ion-fab mini color="white" clear (click)="addFavorite('finish')">
+            <ion-icon name="heart" color="danger" *ngIf="favoriteFinish?.select"></ion-icon>
+            <ion-icon name="heart" color="dark" *ngIf="!favoriteFinish?.select"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="addDescriptionFavorite" color="dark-blue">      
+        <ion-col col-12>
+          <ion-label no-margin>{{'saveAs' | translate}}:</ion-label>
+        </ion-col>
+        <ion-col col-10>
+          <ion-input type="text" [(ngModel)]="directions.favorite" placeholder="{{'exampleHouse' | translate}}"></ion-input>
+        </ion-col>
+        <ion-col col-2 class="content-heart">
+          <button type="button" ion-fab mini color="secondary" (click)="saveFavorite()"><ion-icon name="checkmark"></ion-icon></button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   <ion-list>
     <ion-list-header color="light">
       {{'favorites' | translate}}
@@ -21,7 +41,7 @@
       <ion-spinner></ion-spinner>
     </div>
     <button ion-item *ngFor="let item of locations" (click)="selectLocation(item)">
-      <ion-icon name="home" item-start></ion-icon>
+      <ion-icon name="home" class="icon-home" item-start></ion-icon>
       <h2>
         {{ item.Descripcion }}
       </h2>
@@ -29,6 +49,6 @@
     </button>
   </ion-list>
   <div class="bottom-btn">
-    <button ion-button full (click)="send()">{{ 'ok' | translate }}</button>
+    <button ion-button full color="secondary" (click)="accept()">{{ 'ok' | translate }}</button>
   </div>
 </ion-content>

@@ -104,9 +104,10 @@
  	"program": "Program",
  	"terms": "terms and conditions",
  	"help": "Help",
- 	"policy": "Politic"
-
-
+ 	"policy": "Politic",
+ 	"typeService": "Type of service",
+ 	"originDest": "Origin - Destination",
+ 	"requestService": "Request service"
 
 
 
